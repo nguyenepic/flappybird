@@ -3,7 +3,7 @@
 
 #include<SDL.h>
 #include<SDL_image.h>
-
+struct game{
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 const char* WINDOW_TITLE = "flappy bird";
@@ -15,4 +15,5 @@ void waitUntilKeyPressed();
 void renderTexture(SDL_Texture *texture, int x, int y, SDL_Renderer* renderer);
 SDL_Texture *loadTexture(const char *filename, SDL_Renderer* renderer);
 SDL_Texture *loadTexture(const char *filename, SDL_Renderer* renderer);
+};
 #endif // GAME_H

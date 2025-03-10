@@ -9,4 +9,6 @@ bird ::Bird(double _x,double_y,SDL_Texture *bird){
     texture=bird;
 }
 void bird::falling(){
+    speed+=gravity;
+    y+=speed;
 }
