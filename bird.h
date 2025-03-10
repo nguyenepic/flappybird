@@ -9,7 +9,8 @@ double gravity;
 double speed;
 double jumpstrength;
 SDL_Texture *texture;
-Bird(int _x,int _y,SDL_Texture *bird);
+SDL_Rect birdRect; // Định vị vị trí vẽ chim
+bird(int _x,int _y,SDL_Texture *bird);
 void falling();
 void jump();
 void render(SDL_Renderer *render);

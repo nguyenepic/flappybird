@@ -74,3 +74,28 @@ SDL_Texture *game ::loadTexture(const char *filename, SDL_Renderer* renderer)
 
 	return texture;
 }
+void game ::update(){
+    srcplayer.h=60;
+    srcplayer.w=80;
+    srcplayer.x=0;
+    srcplayer.y=0;
+    destplayer.h=80;
+    destplayer.w=60;
+    destplayer.x=20;
+    destplayer.y=20;
+}
+bool game ::isflying(){
+
+}
+void game ::keyboardinput(){
+    SDL_Event e;
+    while(SDL_PollEvent(&e)){
+        if(e.type==SDL_QUIT){
+            isrunning=false;
+        }else if(e.type==SDL_KEYDOWN){
+        if(e.key.keysym.sym==SDLK_SPACE){
+            bird.jump();
+        }
+    }
+}
+}

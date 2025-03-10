@@ -12,3 +12,6 @@ void bird::falling(){
     speed+=gravity;
     y+=speed;
 }
+void bird ::jump(){
+    speed=jumpstrength;
+}
