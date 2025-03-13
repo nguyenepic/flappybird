@@ -1,7 +1,10 @@
 #include<iostream>
+#include <cstdlib>
 #include"game.h"
 using namespace std;
-
+game::game() {
+    running = true;
+}
 void game ::logErrorAndExit(const char* msg, const char* error)
 {
     SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, "%s: %s", msg, error);
@@ -74,6 +77,16 @@ SDL_Texture *game ::loadTexture(const char *filename, SDL_Renderer* renderer)
 
 	return texture;
 }
+void game::spawnpipe(SDL_Texture* pipeTexture) {
+    double pipeX = SCREEN_WIDTH; // Xuất hiện bên phải màn hình
+    double pipeY = rand() % 200 + 100; // Random trong khoảng 100 - 300
+
+    // Tạo ống nước mới
+    pipe newPipe(pipeX, pipeY, pipeTexture);
+
+    // Thêm vào danh sách của game
+    pipes.push_back(newPipe);
+}
 void game ::update(){
     srcplayer.h=60;
     srcplayer.w=80;
@@ -84,18 +97,19 @@ void game ::update(){
     destplayer.x=20;
     destplayer.y=20;
 }
-bool game ::isflying(){
-
-}
 void game ::keyboardinput(){
     SDL_Event e;
     while(SDL_PollEvent(&e)){
         if(e.type==SDL_QUIT){
-            isrunning=false;
+            running=false;
         }else if(e.type==SDL_KEYDOWN){
         if(e.key.keysym.sym==SDLK_SPACE){
-            bird.jump();
+            flappy.jump();
         }
     }
 }
+}
+
+bool game::checkcollision(const pipe& p) {
+    return SDL_HasIntersection(&flappy.birdRect, &p.pipeRect);
 }
