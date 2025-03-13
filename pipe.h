@@ -14,10 +14,10 @@ struct pipe{
     void update(int speed);
 
     // Vẽ ống nước
-    void render(SDL_Renderer* renderer) ;
+    void render(SDL_Renderer* renderer)const ;
 
     // Kiểm tra nếu pipe ra khỏi màn hình
-    bool isOffScreen() ;
+    bool isOffScreen()const ;
     pipe(int x, int y, SDL_Texture* texture);
 };
 // Hàm tạo ống nước mới và thêm vào danh sách

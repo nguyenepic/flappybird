@@ -19,11 +19,11 @@ void pipe::update(int speed) {
     pipeRect.x = static_cast<int>(x);
 }
 // Kiểm tra xem ống nước có ra khỏi màn hình không
-bool pipe::isOffScreen() {
+bool pipe::isOffScreen()const {
     return x + width < 0; // Nếu ống ra khỏi cạnh trái màn hình
 }
 // Vẽ ống nước lên màn hình
-void pipe::render(SDL_Renderer* renderer) {
+void pipe::render(SDL_Renderer* renderer)const {
     if (texture) {
         SDL_Rect pipeRect = { (int)x, (int)y, (int)width, (int)height };
         SDL_RenderCopy(renderer, texture, nullptr, &pipeRect);

@@ -1,17 +1,19 @@
 #include "game.h"
 #include <SDL.h>
 #include <iostream>
+#include<algorithm>
 
 int main(int argc, char* argv[]) {
     game flappyGame; // Tạo đối tượng game
 
-    SDL_Window* window = flappyGame.initSDL(flappyGame.SCREEN_WIDTH, flappyGame.SCREEN_HEIGHT, flappyGame.WINDOW_TITLE);
+    SDL_Window* window = flappyGame.initSDL();
+
     SDL_Renderer* renderer = flappyGame.createRenderer(window);
 
     // Load hình ảnh
     SDL_Texture* background = flappyGame.loadTexture("background.png", renderer);
     SDL_Texture* birdTexture = flappyGame.loadTexture("bird.jpg", renderer);
-    SDL_Texture* pipeTexture = flappyGame.loadTexture("pipe.png", renderer);
+    SDL_Texture* pipeTexture = flappyGame.loadTexture("pipe.jpg", renderer);
 
     // Kiểm tra load hình ảnh có thành công không
     if (!background || !birdTexture || !pipeTexture) return -1;

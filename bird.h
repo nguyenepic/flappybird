@@ -16,7 +16,7 @@ bird(double _x,double _y,SDL_Texture* _texture);
         y = 0;
         gravity = 0.5;
         speed = 0;
-        jumpstrength = -10;
+        jumpstrength = 10;
         texture = nullptr;
         birdRect = {0, 0, 50, 50};
     }
