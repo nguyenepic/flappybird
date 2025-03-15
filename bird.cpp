@@ -1,7 +1,7 @@
 #include "game.h"
 #include "bird.h"
 
-bird ::bird(double _x,double _y,SDL_Texture *bird){
+bird ::bird(int _x,int _y,SDL_Texture *bird){
     x=_x;
     y=_y;
     speed=0;
@@ -9,8 +9,8 @@ bird ::bird(double _x,double _y,SDL_Texture *bird){
     jumpstrength=-12;
     texture=bird;
     // Khởi tạo birdRect nhưng không ép kiểu
-    birdRect.x = static_cast<int>(x);
-    birdRect.y = static_cast<int>(y);
+    birdRect.x = x;
+    birdRect.y = y;
 
     birdRect.w = 40;
     birdRect.h = 40;

@@ -3,13 +3,13 @@
 #include<SDL.h>
 #include<SDL_image.h>
 struct bird{
-double x,y;
+int x,y;
 double gravity;
 double speed;
 double jumpstrength;
 SDL_Texture *texture;
 SDL_Rect birdRect; // Định vị vị trí vẽ chim
-bird(double _x,double _y,SDL_Texture* _texture);
+bird(int _x,int _y,SDL_Texture* _texture);
     // Constructor mặc định
     bird() {
         x = 0;

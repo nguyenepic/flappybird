@@ -3,16 +3,16 @@
 	"game.h"
 	"bird.h"
 
-1742046556 d:\uet\ltnc\true game\flappy bird\bird.h
+1742050946 d:\uet\ltnc\true game\flappy bird\bird.h
 	<SDL.h>
 	<SDL_image.h>
 
-1742013077 source:d:\uet\ltnc\true game\flappy bird\pipe.cpp
+1742050821 source:d:\uet\ltnc\true game\flappy bird\pipe.cpp
 	"pipe.h"
 	<cstdlib>
 	<vector>
 
-1741881156 d:\uet\ltnc\true game\flappy bird\pipe.h
+1742050821 d:\uet\ltnc\true game\flappy bird\pipe.h
 	<SDL.h>
 	<SDL_image.h>
 	<vector>
@@ -29,7 +29,7 @@
 	<SDL_image.h>
 	<vector>
 
-1742047709 source:d:\uet\ltnc\true game\flappy bird\main.cpp
+1742049903 source:d:\uet\ltnc\true game\flappy bird\main.cpp
 	"game.h"
 	<SDL.h>
 	<iostream>

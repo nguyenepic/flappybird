@@ -20,6 +20,10 @@ int main(int argc, char* argv[]) {
     SDL_Texture* pipeTexture = tempGame.loadTexture("pipe.jpg", renderer);
     SDL_Texture* gameover = tempGame.loadTexture("gameover.jpg", renderer);
 
+
+
+
+
     // Kiểm tra load hình ảnh có thành công không
     if (!background || !birdTexture || !pipeTexture) {
         cout << "Failed to load images!" << endl;
