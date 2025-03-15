@@ -4,7 +4,7 @@ bird ::bird(double _x,double _y,SDL_Texture *bird){
     y=_y;
     speed=0;
     gravity=1;
-    jumpstrength=-0.5;
+    jumpstrength=-12;
     texture=bird;
     // Khởi tạo birdRect nhưng không ép kiểu
     birdRect.x = static_cast<int>(x);

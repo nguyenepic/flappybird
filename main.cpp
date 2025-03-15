@@ -14,12 +14,13 @@ int main(int argc, char* argv[]) {
     SDL_Texture* background = flappyGame.loadTexture("background.png", renderer);
     SDL_Texture* birdTexture = flappyGame.loadTexture("bird.jpg", renderer);
     SDL_Texture* pipeTexture = flappyGame.loadTexture("pipe.jpg", renderer);
-
+    SDL_Texture* Texture = flappyGame.loadTexture("gameover.jpg", renderer);
     // Kiểm tra load hình ảnh có thành công không
     if (!background || !birdTexture || !pipeTexture) return -1;
 
     bird flappy(100, 250, birdTexture); // Tạo chim
     bool running = true;
+
     SDL_Event event;
 
     while (running) {

@@ -28,6 +28,7 @@ struct game {
     void update();
     void keyboardinput();
     bool checkcollision(const bird& b, const pipe& p) const;
+    bool gameover();
 
 
     SDL_Rect srcplayer, destplayer;
