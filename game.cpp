@@ -72,11 +72,16 @@ SDL_Texture* game::loadTexture(const char* filename, SDL_Renderer* renderer) {
 
 void game::spawnpipe(SDL_Texture* pipeTexture) {
     double pipeX = SCREEN_WIDTH;
-    double pipeY = rand() % 200 + 100;
+    double gap = 150; // Khoảng trống giữa hai ống
+    double topHeight = rand() % 200 + 50; // Chiều cao ống trên
 
-    pipe newPipe(pipeX, pipeY, pipeTexture);
-    pipes.push_back(newPipe);
+    // Ống trên
+    pipes.push_back(pipe(pipeX, topHeight - 300, pipeTexture));
+
+    // Ống dưới
+    pipes.push_back(pipe(pipeX, topHeight + gap, pipeTexture));
 }
+
 
 void game::update() {
     srcplayer = {0, 0, 80, 60};

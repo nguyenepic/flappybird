@@ -17,19 +17,19 @@
 	<SDL_image.h>
 	<vector>
 
-1742045341 source:d:\uet\ltnc\true game\flappy bird\game.cpp
+1742047893 source:d:\uet\ltnc\true game\flappy bird\game.cpp
 	<iostream>
 	<cstdlib>
 	"game.h"
 
-1742047239 d:\uet\ltnc\true game\flappy bird\game.h
+1742047709 d:\uet\ltnc\true game\flappy bird\game.h
 	"bird.h"
 	"pipe.h"
 	<SDL.h>
 	<SDL_image.h>
 	<vector>
 
-1742046556 source:d:\uet\ltnc\true game\flappy bird\main.cpp
+1742047709 source:d:\uet\ltnc\true game\flappy bird\main.cpp
 	"game.h"
 	<SDL.h>
 	<iostream>

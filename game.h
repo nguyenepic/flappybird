@@ -12,6 +12,7 @@ struct game {
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
     const char* WINDOW_TITLE = "flappy bird";
+     int score = 0; // Biến lưu điểm số
       game();  // Thêm constructor mặc định
     game(SDL_Texture* birdTexture);  // Constructor có tham số
 

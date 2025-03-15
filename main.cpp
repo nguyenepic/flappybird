@@ -74,6 +74,7 @@ int main(int argc, char* argv[]) {
             p.render(renderer);
         }
 
+
         SDL_RenderPresent(renderer);
         SDL_Delay(16);
     }

@@ -24,8 +24,7 @@ bool pipe::isOffScreen()const {
 }
 // Vẽ ống nước lên màn hình
 void pipe::render(SDL_Renderer* renderer)const {
-    if (texture) {
-        SDL_Rect pipeRect = { (int)x, (int)y, (int)width, (int)height };
-        SDL_RenderCopy(renderer, texture, nullptr, &pipeRect);
-    }
+    SDL_Rect dstRect = { (int)x, (int)y, 50, 300 };
+    SDL_RenderCopyEx(renderer, texture, NULL, &dstRect, (y < 0) ? 180 : 0, NULL, SDL_FLIP_NONE);
 }
+
