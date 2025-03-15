@@ -11,10 +11,10 @@ int main(int argc, char* argv[]) {
     SDL_Renderer* renderer = flappyGame.createRenderer(window);
 
     // Load hình ảnh
-    SDL_Texture* background = flappyGame.loadTexture("background.png", renderer);
-    SDL_Texture* birdTexture = flappyGame.loadTexture("bird.jpg", renderer);
+    SDL_Texture* background = flappyGame.loadTexture("background.jpg", renderer);
+    SDL_Texture* birdTexture = flappyGame.loadTexture("bird.png", renderer);
     SDL_Texture* pipeTexture = flappyGame.loadTexture("pipe.jpg", renderer);
-    SDL_Texture* Texture = flappyGame.loadTexture("gameover.jpg", renderer);
+    SDL_Texture* gameover = flappyGame.loadTexture("gameover.jpg", renderer);
     // Kiểm tra load hình ảnh có thành công không
     if (!background || !birdTexture || !pipeTexture) return -1;
 
@@ -53,7 +53,8 @@ int main(int argc, char* argv[]) {
         // Kiểm tra va chạm
         for (const auto& p : flappyGame.pipes) {
             if (flappyGame.checkcollision(flappy, p)) {
-                running = false; // Kết thúc game
+
+
             }
         }
 
@@ -74,6 +75,7 @@ int main(int argc, char* argv[]) {
     SDL_DestroyTexture(background);
     SDL_DestroyTexture(birdTexture);
     SDL_DestroyTexture(pipeTexture);
+    SDL_DestroyTexture(gameover);
     flappyGame.quitSDL(window, renderer);
 
     return 0;
