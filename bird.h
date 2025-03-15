@@ -23,6 +23,7 @@ bird(double _x,double _y,SDL_Texture* _texture);
 void update();
 void falling();
 void jump();
+bool keepInRange();
 void render(SDL_Renderer* renderer);
 };
 #endif // BIRD_H

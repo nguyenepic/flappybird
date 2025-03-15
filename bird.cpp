@@ -1,4 +1,6 @@
-#include"bird.h"
+#include "game.h"
+#include "bird.h"
+
 bird ::bird(double _x,double _y,SDL_Texture *bird){
     x=_x;
     y=_y;
@@ -32,3 +34,12 @@ void bird::render(SDL_Renderer* renderer) {
         SDL_RenderCopy(renderer, texture, nullptr, &birdRect);
     }
 }
+bool bird::keepInRange() {
+    if (birdRect.y < 0) {
+        birdRect.y = 0;  // Không cho bay quá cao
+        return false;    // Trả về false để báo là chạm trần
+    }
+    return true; // Chim vẫn trong màn hình (hoặc có thể rơi xuống dưới)
+}
+
+
