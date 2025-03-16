@@ -88,17 +88,6 @@ void game::update() {
     destplayer = {20, 20, 60, 80};
 }
 
-void game::keyboardinput() {
-    SDL_Event e;
-    while (SDL_PollEvent(&e)) {
-        if (e.type == SDL_QUIT) {
-            running = false;
-        } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE) {
-            flappy.jump();
-        }
-    }
-}
-
 bool game::checkcollision(const bird& b, const pipe& p) const {
     return SDL_HasIntersection(&b.birdRect, &p.pipeRect);
 }

@@ -28,7 +28,6 @@ struct game {
     std::vector<pipe> pipes;
     void spawnpipe(SDL_Texture* pipeTexture);
     void update();
-    void keyboardinput();
     bool checkcollision(const bird& b, const pipe& p) const;
     bool gameover();
 
