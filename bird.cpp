@@ -6,14 +6,14 @@ bird ::bird(int _x,int _y,SDL_Texture *bird){
     y=_y;
     speed=0;
     gravity=1;
-    jumpstrength=-12;
+    jumpstrength=-10;
     texture=bird;
     // Khởi tạo birdRect nhưng không ép kiểu
     birdRect.x = x;
     birdRect.y = y;
 
-    birdRect.w = 40;
-    birdRect.h = 40;
+    birdRect.w = 70;
+    birdRect.h = 70;
 }
 void bird::update() {
     falling(); // Gọi hàm falling() để áp dụng trọng lực

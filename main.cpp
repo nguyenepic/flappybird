@@ -21,6 +21,8 @@ int main(int argc, char* argv[]) {
         cout << "Failed to load images!" << endl;
         return -1;
     }
+
+
     // Chỉ tạo game sau khi `birdTexture` đã load xong
     game flappyGame(birdTexture);
     bool running = true;
