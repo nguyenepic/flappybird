@@ -24,6 +24,8 @@ struct game {
     SDL_Renderer* createRenderer(SDL_Window* window);
     void quitSDL(SDL_Window* window, SDL_Renderer* renderer);
     void waitUntilKeyPressed();
+    void handleEvent(bool& running);
+
 
     std::vector<pipe> pipes;
     void spawnpipe(SDL_Texture* pipeTexture);

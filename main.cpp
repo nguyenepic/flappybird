@@ -28,13 +28,8 @@ int main(int argc, char* argv[]) {
     bool running = true;
     SDL_Event event;
     while (running) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                running = false;
-            } else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE) {
-                flappyGame.flappy.jump();
-            }
-        }
+       flappyGame.handleEvent(running);
+
         flappyGame.flappy.update();
         flappyGame.flappy.keepInRange();  // Đảm bảo chim luôn trong màn hình
         if (flappyGame.pipes.empty() || flappyGame.pipes.back().x < flappyGame.SCREEN_WIDTH - 200) {

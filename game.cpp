@@ -53,6 +53,17 @@ void game::waitUntilKeyPressed() {
         SDL_Delay(100);
     }
 }
+void game::handleEvent(bool& running) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            running = false;
+        } else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE) {
+            flappy.jump();
+        }
+    }
+}
+
 
 void game::renderTexture(SDL_Texture* texture, int x, int y, SDL_Renderer* renderer) {
     SDL_Rect dest = {x, y, 0, 0};
