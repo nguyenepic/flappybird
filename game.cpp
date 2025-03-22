@@ -22,8 +22,14 @@ SDL_Window* game::initSDL() {
     if (!IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG))
         logErrorAndExit("SDL_image error:", IMG_GetError());
 
+    // Khởi tạo SDL_ttf
+    if (TTF_Init() == -1) {
+        logErrorAndExit("SDL_ttf could not initialize!", TTF_GetError());
+    }
+
     return window;
 }
+
 SDL_Renderer* game::createRenderer(SDL_Window* window) {
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
@@ -54,26 +60,9 @@ bool game::loadSounds() {
 
     flapSound = Mix_LoadWAV("flapSound.wav");
 
-if (!flapSound) {
-    SDL_Log("❌ Failed to load flapSound.wav! SDL_mixer Error: %s", Mix_GetError());
-    return false;  // Nếu âm thanh không load được, báo lỗi ngay
-}
-
-    if (!flapSound) {
-        SDL_Log("❌ Failed to load flapSound.wav! SDL_mixer Error: %s", Mix_GetError());
-    } else {
-        SDL_Log("✅ flapSound loaded successfully!");
-    }
-
     hitSound = Mix_LoadWAV("hitSound.wav");
-    if (!hitSound) {
-        SDL_Log("❌ Failed to load hitSound.wav! SDL_mixer Error: %s", Mix_GetError());
-    }
 
     backgroundmusic = Mix_LoadMUS("backgroundmusic.mp3");
-    if (!backgroundmusic) {
-        SDL_Log("❌ Failed to load backgroundmusic.mp3! SDL_mixer Error: %s", Mix_GetError());
-    }
 
     return flapSound && hitSound && backgroundmusic;
 }
@@ -159,6 +148,35 @@ void game::spawnpipe(SDL_Texture* pipeTexture) {
     // Ống dưới
     pipes.push_back(pipe(pipeX, topHeight + gap, pipeTexture));
 }
+#include <SDL_ttf.h>
+
+void game::renderScore(SDL_Renderer* renderer, int score) {
+    TTF_Font* font = TTF_OpenFont("arial.ttf", 24); // Mở font Arial, cỡ 24px
+    if (!font) {
+        cout << "Failed to load font: " << TTF_GetError() << endl;
+        return;
+    }
+
+    SDL_Color textColor = {255, 255, 255}; // Màu trắng
+    string scoreText = "Score: " + to_string(score);
+
+    SDL_Surface* textSurface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);
+    if (!textSurface) {
+        cout << "Failed to create text surface: " << TTF_GetError() << endl;
+        TTF_CloseFont(font);
+        return;
+    }
+
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+    SDL_Rect textRect = {10, 10, textSurface->w, textSurface->h}; // Vị trí góc trái trên
+
+    SDL_RenderCopy(renderer, textTexture, nullptr, &textRect); // Vẽ lên màn hình
+
+    SDL_FreeSurface(textSurface);
+    SDL_DestroyTexture(textTexture);
+    TTF_CloseFont(font);
+}
+
 void game::update() {
     srcplayer = {0, 0, 80, 60};
     destplayer = {20, 20, 60, 80};

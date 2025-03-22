@@ -6,6 +6,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 #include <vector>
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
@@ -37,6 +38,7 @@ struct game {
     void handleEvent(bool& running);
     std::vector<pipe> pipes;
     void spawnpipe(SDL_Texture* pipeTexture);
+    void renderScore(SDL_Renderer* renderer, int score);
     void update();
     bool checkcollision(const bird& b, const pipe& p) const;
     bool checkGameOver(SDL_Texture* gameover, SDL_Renderer* renderer, bool& running);
