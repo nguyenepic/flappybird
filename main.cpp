@@ -8,25 +8,56 @@ using namespace std;
 int main(int argc, char* argv[]) {
     SDL_Window* window;
     SDL_Renderer* renderer;
-    game tempGame(nullptr);
+    game tempGame;
+
     window = tempGame.initSDL();
     renderer = tempGame.createRenderer(window);
+    Mix_Chunk* hitSound = NULL;
+    Mix_Chunk* flapSound = NULL;
+    Mix_Music* backgroundmusic = NULL;
 
     // Load hình ảnh
     SDL_Texture *background, *birdTexture, *pipeTexture, *gameover;
     if (!tempGame.loadAllTextures(renderer, background, birdTexture, pipeTexture, gameover)) {
         return -1;
     }
-    game flappyGame(birdTexture);
+    if (!tempGame.loadSounds()) {
+    SDL_Log("ERROR: Failed to load sounds!");
+    return -1;
+}
+
+// Lấy âm thanh từ `tempGame`
+flapSound = tempGame.getFlapSound();
+hitSound = tempGame.getHitSound();
+backgroundmusic = tempGame.getBackgroundMusic();
+
+
+Mix_Volume(-1, MIX_MAX_VOLUME);
+Mix_VolumeMusic(MIX_MAX_VOLUME);
+SDL_Log("🎵 Testing sound before game loop...");
+
+// Phát thử flapSound
+
+    Mix_PlayChannel(-1, flapSound, 0);
+
+// Phát thử background music
+
+    Mix_PlayMusic(backgroundmusic, -1);
+
+    game flappyGame; // Dùng constructor mặc định, tránh ghi đè dữ liệu
+    flappyGame = tempGame; // Copy tempGame vào flappyGame
+    flappyGame.flappy = bird(100, 250, birdTexture); // Đảm bảo flappy có texture
+
     bool running = true;
     while (running) {
+
         // Xử lý sự kiện
         flappyGame.handleEvent(running);
         flappyGame.flappy.update();
         flappyGame.flappy.keepInRange();
 
         // Spawn pipes
-        if (flappyGame.pipes.empty() || flappyGame.pipes.back().x < flappyGame.SCREEN_WIDTH - 200) {
+        if (flappyGame.pipes.empty() || flappyGame.pipes.back().x < SCREEN_WIDTH - 200) {
             flappyGame.spawnpipe(pipeTexture);
         }
         // Cập nhật vị trí ống
@@ -53,6 +84,6 @@ int main(int argc, char* argv[]) {
         SDL_Delay(16);
     }
     // Dọn dẹp bộ nhớ
-    flappyGame.cleanup(background, birdTexture, pipeTexture, gameover, window, renderer);
+    flappyGame.cleanup(background, birdTexture, pipeTexture, gameover,flapSound,hitSound,backgroundmusic, window, renderer);
     return 0;
 }
