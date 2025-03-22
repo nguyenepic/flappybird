@@ -67,10 +67,7 @@ int main(int argc, char* argv[]) {
         SDL_Delay(16);
     }
     // Giải phóng tài nguyên
-    SDL_DestroyTexture(background);
-    SDL_DestroyTexture(birdTexture);
-    SDL_DestroyTexture(pipeTexture);
-    SDL_DestroyTexture(gameover);
-    flappyGame.quitSDL(window, renderer);
-    return 0;
+    flappyGame.cleanup(background, birdTexture, pipeTexture, gameover, window, renderer);
+
+
 }

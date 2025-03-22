@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1742483455 source:d:\uet\ltnc\true game\flappy bird\bird.cpp
+1742483490 source:d:\uet\ltnc\true game\flappy bird\bird.cpp
 	"game.h"
 	"bird.h"
 
@@ -22,14 +22,14 @@
 	<cstdlib>
 	"game.h"
 
-1742139254 d:\uet\ltnc\true game\flappy bird\game.h
+1742613582 d:\uet\ltnc\true game\flappy bird\game.h
 	"bird.h"
 	"pipe.h"
 	<SDL.h>
 	<SDL_image.h>
 	<vector>
 
-1742481664 source:d:\uet\ltnc\true game\flappy bird\main.cpp
+1742613481 source:d:\uet\ltnc\true game\flappy bird\main.cpp
 	"game.h"
 	<SDL.h>
 	<iostream>

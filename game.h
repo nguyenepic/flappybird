@@ -35,6 +35,8 @@ struct game {
     SDL_Texture* background;
     void renderTexture(SDL_Texture* texture, int x, int y, SDL_Renderer* renderer);
     SDL_Texture* loadTexture(const char* filename, SDL_Renderer* renderer);
+    void cleanup(SDL_Texture* background, SDL_Texture* birdTexture, SDL_Texture* pipeTexture, SDL_Texture* gameover, SDL_Window* window, SDL_Renderer* renderer);
+
 
     bird flappy; // Bird là thành viên của game
 };

@@ -91,3 +91,12 @@ void game::update() {
 bool game::checkcollision(const bird& b, const pipe& p) const {
     return SDL_HasIntersection(&b.birdRect, &p.pipeRect);
 }
+void game::cleanup(SDL_Texture* background, SDL_Texture* birdTexture, SDL_Texture* pipeTexture, SDL_Texture* gameover, SDL_Window* window, SDL_Renderer* renderer) {
+    SDL_DestroyTexture(background);
+    SDL_DestroyTexture(birdTexture);
+    SDL_DestroyTexture(pipeTexture);
+    SDL_DestroyTexture(gameover);
+    quitSDL(window, renderer); // Gọi hàm quitSDL để giải phóng SDL
+}
+
+
