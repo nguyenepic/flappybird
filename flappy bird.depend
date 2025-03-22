@@ -17,7 +17,7 @@
 	<SDL_image.h>
 	<vector>
 
-1742616326 source:d:\uet\ltnc\true game\flappy bird\game.cpp
+1742617101 source:d:\uet\ltnc\true game\flappy bird\game.cpp
 	<iostream>
 	<cstdlib>
 	<algorithm>
@@ -30,7 +30,7 @@
 	<SDL_image.h>
 	<vector>
 
-1742616261 source:d:\uet\ltnc\true game\flappy bird\main.cpp
+1742616586 source:d:\uet\ltnc\true game\flappy bird\main.cpp
 	"game.h"
 	<SDL.h>
 	<iostream>

@@ -36,7 +36,7 @@ SDL_Renderer* game::createRenderer(SDL_Window* window) {
 bool game::loadAllTextures(SDL_Renderer* renderer, SDL_Texture*& background, SDL_Texture*& birdTexture, SDL_Texture*& pipeTexture, SDL_Texture*& gameover) {
     background = loadTexture("background.jpg", renderer);
     birdTexture = loadTexture("bird.png", renderer);
-    pipeTexture = loadTexture("pipe.jpg", renderer);
+    pipeTexture = loadTexture("pipe.png", renderer);
     gameover = loadTexture("gameover.png", renderer);
 
     if (!background || !birdTexture || !pipeTexture || !gameover) {
