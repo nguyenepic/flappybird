@@ -54,7 +54,7 @@ bool game::loadAllTextures(SDL_Renderer* renderer, SDL_Texture*& background, SDL
 }
 bool game::loadSounds() {
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-        SDL_Log("❌ SDL_mixer could not initialize! Error: %s", Mix_GetError());
+        SDL_Log(" SDL_mixer could not initialize! Error: %s", Mix_GetError());
         return false;
     }
 
@@ -76,12 +76,12 @@ Mix_Music* game::getBackgroundMusic() const { return backgroundmusic; }
 void game::playSound(Mix_Chunk* sound) {
     if (sound) {
         if (Mix_PlayChannel(-1, sound, 0) == -1) {
-            SDL_Log("❌ Error playing sound: %s", Mix_GetError());
+            SDL_Log(" Error playing sound: %s", Mix_GetError());
         } else {
-            SDL_Log("✅ Sound played successfully!");
+            SDL_Log(" Sound played successfully!");
         }
     } else {
-        SDL_Log("❌ Sound is NULL, cannot play!");
+        SDL_Log(" Sound is NULL, cannot play!");
     }
 }
 
@@ -110,12 +110,12 @@ void game::handleEvent(bool& running) {
             flappy.jump();
 
             if (flapSound) {
-                SDL_Log("🔊 Playing flapSound...");
+                SDL_Log(" Playing flapSound...");
                 if (Mix_PlayChannel(-1, flapSound, 0) == -1) {
-                    SDL_Log("❌ Error playing flapSound: %s", Mix_GetError());
+                    SDL_Log(" Error playing flapSound: %s", Mix_GetError());
                 }
             } else {
-                SDL_Log("❌ flapSound is NULL!");
+                SDL_Log(" flapSound is NULL!");
             }
         }
     }
@@ -239,7 +239,7 @@ void game::cleanup(SDL_Texture* background, SDL_Texture* birdTexture, SDL_Textur
     Mix_FreeChunk(flapSound);
     Mix_FreeChunk(hitSound);
     Mix_FreeMusic(backgroundmusic);
-    flapSound = nullptr;
+
     Mix_CloseAudio();
 
     // Giải phóng SDL

@@ -8,7 +8,7 @@ bird ::bird(int _x,int _y,SDL_Texture *bird){
     gravity=1;
     jumpstrength=-10;
     texture=bird;
-    // Khởi tạo birdRect nhưng không ép kiểu
+
     birdRect.x = x;
     birdRect.y = y;
 
