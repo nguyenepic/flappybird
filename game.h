@@ -14,6 +14,7 @@ struct game {
     const char* WINDOW_TITLE = "flappy bird";
       game();  // Thêm constructor mặc định
     game(SDL_Texture* birdTexture);  // Constructor có tham số
+    bool loadAllTextures(SDL_Renderer* renderer, SDL_Texture*& background, SDL_Texture*& birdTexture, SDL_Texture*& pipeTexture, SDL_Texture*& gameover);
     bool running;
     bool isrunning() { return running; }
     void logErrorAndExit(const char* msg, const char* error);

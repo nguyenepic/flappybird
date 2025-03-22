@@ -12,15 +12,11 @@ int main(int argc, char* argv[]) {
     window = tempGame.initSDL();
     renderer = tempGame.createRenderer(window);
     // Load hình ảnh
-    SDL_Texture* background = tempGame.loadTexture("background.jpg", renderer);
-    SDL_Texture* birdTexture = tempGame.loadTexture("bird.png", renderer);
-    SDL_Texture* pipeTexture = tempGame.loadTexture("pipe.jpg", renderer);
-    SDL_Texture* gameover = tempGame.loadTexture("gameover.jpg", renderer);
-    // Kiểm tra load hình ảnh có thành công không
-    if (!background || !birdTexture || !pipeTexture) {
-        cout << "Failed to load images!" << endl;
-        return -1;
+   SDL_Texture *background, *birdTexture, *pipeTexture, *gameover;
+     if (!tempGame.loadAllTextures(renderer, background, birdTexture, pipeTexture, gameover)) {
+    return -1;
     }
+
     // Chỉ tạo game sau khi `birdTexture` đã load xong
     game flappyGame(birdTexture);
     bool running = true;
@@ -41,9 +37,9 @@ int main(int argc, char* argv[]) {
         for (const auto& p : flappyGame.pipes) {
            if (flappyGame.checkGameOver(gameover, renderer, running)) {
            break;
-}
-
         }
+
+    }
         SDL_RenderClear(renderer);
         flappyGame.renderTexture(background, 0, 0, renderer);
         flappyGame.flappy.render(renderer);
