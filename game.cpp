@@ -1,10 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "game.h"
-
 using namespace std;
-
-
 game::game(SDL_Texture* birdTexture) : flappy(100, 250, birdTexture) {
     running = true;
 }
@@ -13,7 +10,6 @@ void game::logErrorAndExit(const char* msg, const char* error) {
     SDL_Quit();
     exit(EXIT_FAILURE);
 }
-
 SDL_Window* game::initSDL() {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         logErrorAndExit("SDL_Init", SDL_GetError());
@@ -26,7 +22,6 @@ SDL_Window* game::initSDL() {
 
     return window;
 }
-
 SDL_Renderer* game::createRenderer(SDL_Window* window) {
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
@@ -37,7 +32,6 @@ SDL_Renderer* game::createRenderer(SDL_Window* window) {
 
     return renderer;
 }
-
 void game::quitSDL(SDL_Window* window, SDL_Renderer* renderer) {
     IMG_Quit();
     SDL_DestroyRenderer(renderer);
@@ -63,8 +57,6 @@ void game::handleEvent(bool& running) {
         }
     }
 }
-
-
 void game::renderTexture(SDL_Texture* texture, int x, int y, SDL_Renderer* renderer) {
     SDL_Rect dest = {x, y, 0, 0};
     SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
@@ -80,7 +72,6 @@ SDL_Texture* game::loadTexture(const char* filename, SDL_Renderer* renderer) {
 
     return texture;
 }
-
 void game::spawnpipe(SDL_Texture* pipeTexture) {
     double pipeX = SCREEN_WIDTH;
     double gap = 150; // Khoảng trống giữa hai ống
@@ -92,16 +83,26 @@ void game::spawnpipe(SDL_Texture* pipeTexture) {
     // Ống dưới
     pipes.push_back(pipe(pipeX, topHeight + gap, pipeTexture));
 }
-
-
 void game::update() {
     srcplayer = {0, 0, 80, 60};
     destplayer = {20, 20, 60, 80};
 }
-
 bool game::checkcollision(const bird& b, const pipe& p) const {
     return SDL_HasIntersection(&b.birdRect, &p.pipeRect);
 }
+bool game::checkGameOver(SDL_Texture* gameover, SDL_Renderer* renderer, bool& running) {
+    for (const auto& p : pipes) {
+        if (checkcollision(flappy, p) || flappy.birdRect.y > SCREEN_HEIGHT) {
+            SDL_RenderCopy(renderer, gameover, NULL, NULL);
+            SDL_RenderPresent(renderer);
+            SDL_Delay(2000);
+            running = false;
+            return true;
+        }
+    }
+    return false;
+}
+
 void game::cleanup(SDL_Texture* background, SDL_Texture* birdTexture, SDL_Texture* pipeTexture, SDL_Texture* gameover, SDL_Window* window, SDL_Renderer* renderer) {
     SDL_DestroyTexture(background);
     SDL_DestroyTexture(birdTexture);

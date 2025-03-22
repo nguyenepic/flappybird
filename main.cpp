@@ -21,15 +21,12 @@ int main(int argc, char* argv[]) {
         cout << "Failed to load images!" << endl;
         return -1;
     }
-
-
     // Chỉ tạo game sau khi `birdTexture` đã load xong
     game flappyGame(birdTexture);
     bool running = true;
     SDL_Event event;
     while (running) {
        flappyGame.handleEvent(running);
-
         flappyGame.flappy.update();
         flappyGame.flappy.keepInRange();  // Đảm bảo chim luôn trong màn hình
         if (flappyGame.pipes.empty() || flappyGame.pipes.back().x < flappyGame.SCREEN_WIDTH - 200) {
@@ -42,14 +39,10 @@ int main(int argc, char* argv[]) {
             [](const pipe& p) { return p.isOffScreen(); }), flappyGame.pipes.end());
 
         for (const auto& p : flappyGame.pipes) {
-            if (flappyGame.checkcollision(flappyGame.flappy, p) || flappyGame.flappy.birdRect.y > SCREEN_HEIGHT)
- {
-                SDL_RenderCopy(renderer, gameover, NULL, NULL);
-                SDL_RenderPresent(renderer);
-                SDL_Delay(2000);
-                running = false;
-                break;
-            }
+           if (flappyGame.checkGameOver(gameover, renderer, running)) {
+           break;
+}
+
         }
         SDL_RenderClear(renderer);
         flappyGame.renderTexture(background, 0, 0, renderer);
@@ -63,6 +56,4 @@ int main(int argc, char* argv[]) {
     }
     // Giải phóng tài nguyên
     flappyGame.cleanup(background, birdTexture, pipeTexture, gameover, window, renderer);
-
-
 }

@@ -22,7 +22,7 @@
 	<cstdlib>
 	"game.h"
 
-1742613822 d:\uet\ltnc\true game\flappy bird\game.h
+1742614166 d:\uet\ltnc\true game\flappy bird\game.h
 	"bird.h"
 	"pipe.h"
 	<SDL.h>
