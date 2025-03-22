@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include<algorithm>
 #include "game.h"
 using namespace std;
 game::game(SDL_Texture* birdTexture) : flappy(100, 250, birdTexture) {
@@ -36,7 +37,7 @@ bool game::loadAllTextures(SDL_Renderer* renderer, SDL_Texture*& background, SDL
     background = loadTexture("background.jpg", renderer);
     birdTexture = loadTexture("bird.png", renderer);
     pipeTexture = loadTexture("pipe.jpg", renderer);
-    gameover = loadTexture("gameover.jpg", renderer);
+    gameover = loadTexture("gameover.png", renderer);
 
     if (!background || !birdTexture || !pipeTexture || !gameover) {
         SDL_Log("Failed to load images!");
@@ -104,18 +105,46 @@ bool game::checkcollision(const bird& b, const pipe& p) const {
     return SDL_HasIntersection(&b.birdRect, &p.pipeRect);
 }
 bool game::checkGameOver(SDL_Texture* gameover, SDL_Renderer* renderer, bool& running) {
+    // Kiểm tra va chạm với ống hoặc rơi khỏi màn hình
     for (const auto& p : pipes) {
         if (checkcollision(flappy, p) || flappy.birdRect.y > SCREEN_HEIGHT) {
+            // Hiển thị Game Over
             SDL_RenderCopy(renderer, gameover, NULL, NULL);
             SDL_RenderPresent(renderer);
-            SDL_Delay(2000);
-            running = false;
-            return true;
+
+            // Chờ người chơi nhấn phím
+            SDL_Event event;
+            while (true) {
+                while (SDL_PollEvent(&event)) {
+                    if (event.type == SDL_QUIT) {
+                        running = false;
+                        return true;
+                    }
+                    if (event.type == SDL_KEYDOWN) {
+                        if (event.key.keysym.sym == SDLK_ESCAPE) {
+                            running = false;  // Thoát game
+                            return true;
+                        } else {
+                            return true;  // Nhấn phím khác để restart
+                        }
+                    }
+                }
+                SDL_Delay(100);
+            }
         }
     }
-    return false;
+    return false;  // Chưa game over
 }
+void game::restartGame(SDL_Renderer* renderer, SDL_Texture* background, SDL_Texture* birdTexture, SDL_Texture* pipeTexture, SDL_Texture* gameover) {
+    // Reset vị trí chim
+    flappy = bird(100, 250, birdTexture);
 
+    // Xóa tất cả ống
+    pipes.clear();
+
+    // Bắt đầu lại vòng lặp
+    running = true;
+}
 void game::cleanup(SDL_Texture* background, SDL_Texture* birdTexture, SDL_Texture* pipeTexture, SDL_Texture* gameover, SDL_Window* window, SDL_Renderer* renderer) {
     SDL_DestroyTexture(background);
     SDL_DestroyTexture(birdTexture);
