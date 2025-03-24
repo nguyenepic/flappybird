@@ -4,7 +4,7 @@
 pipe ::pipe(int _x,int _y,SDL_Texture *_texture){
     x=_x;
     y=_y;
-    width=60;
+    width=150;
     height=300;
     texture=_texture;
       passed = false; // Chưa được vượt qua
@@ -24,7 +24,7 @@ bool pipe::isOffScreen()const {
 }
 // Vẽ ống nước lên màn hình
 void pipe::render(SDL_Renderer* renderer)const {
-    SDL_Rect dstRect = { x, y, 60, 300 };
+    SDL_Rect dstRect = { x, y, 50, 300 };
     SDL_RenderCopyEx(renderer, texture, NULL, &dstRect, (y < 0) ? 180 : 0, NULL, SDL_FLIP_NONE);
 }
 

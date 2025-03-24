@@ -11,7 +11,6 @@
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
 struct game {
-
     const char* WINDOW_TITLE = "flappy bird";
     Mix_Chunk* flapSound;
     Mix_Chunk* hitSound;
@@ -19,7 +18,6 @@ struct game {
     Mix_Chunk* getFlapSound() const;
     Mix_Chunk* getHitSound() const;
     Mix_Music* getBackgroundMusic() const;
-
 
       game();  // Thêm constructor mặc định
     game(SDL_Texture* birdTexture);  // Constructor có tham số
