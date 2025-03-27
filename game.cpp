@@ -1,10 +1,11 @@
+#include <SDL_ttf.h>
 #include <iostream>
 #include <cstdlib>
 #include<algorithm>
 #include "game.h"
 using namespace std;
 game::game(SDL_Texture* birdTexture)
-    : flappy(100, 250, birdTexture), flapSound(nullptr), hitSound(nullptr), backgroundmusic(nullptr) {
+    : flappy(100, 250, birdTexture)  {
     running = true;
 }
 void game::logErrorAndExit(const char* msg, const char* error) {
@@ -52,40 +53,6 @@ bool game::loadAllTextures(SDL_Renderer* renderer, SDL_Texture*& background, SDL
     }
     return true;
 }
-bool game::loadSounds() {
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-        SDL_Log(" SDL_mixer could not initialize! Error: %s", Mix_GetError());
-        return false;
-    }
-
-    flapSound = Mix_LoadWAV("flapSound.wav");
-
-    hitSound = Mix_LoadWAV("hitSound.wav");
-
-    backgroundmusic = Mix_LoadMUS("backgroundmusic.mp3");
-
-    return flapSound && hitSound && backgroundmusic;
-}
-
-
-Mix_Chunk* game::getFlapSound() const { return flapSound; }
-Mix_Chunk* game::getHitSound() const { return hitSound; }
-Mix_Music* game::getBackgroundMusic() const { return backgroundmusic; }
-
-
-void game::playSound(Mix_Chunk* sound) {
-    if (sound) {
-        if (Mix_PlayChannel(-1, sound, 0) == -1) {
-            SDL_Log(" Error playing sound: %s", Mix_GetError());
-        } else {
-            SDL_Log(" Sound played successfully!");
-        }
-    } else {
-        SDL_Log(" Sound is NULL, cannot play!");
-    }
-}
-
-
 void game::quitSDL(SDL_Window* window, SDL_Renderer* renderer) {
     IMG_Quit();
     SDL_DestroyRenderer(renderer);
@@ -101,7 +68,7 @@ void game::waitUntilKeyPressed() {
         SDL_Delay(100);
     }
 }
-void game::handleEvent(bool& running) {
+void game::handleEvent(bool& running,Mix_Chunk* flapSound) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
@@ -109,17 +76,11 @@ void game::handleEvent(bool& running) {
         } else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE) {
             flappy.jump();
 
-            if (flapSound) {
-                SDL_Log(" Playing flapSound...");
-                if (Mix_PlayChannel(-1, flapSound, 0) == -1) {
-                    SDL_Log(" Error playing flapSound: %s", Mix_GetError());
-                }
-            } else {
-                SDL_Log(" flapSound is NULL!");
-            }
+            audio.playSound(flapSound);
         }
     }
 }
+
 
 
 void game::renderTexture(SDL_Texture* texture, int x, int y, SDL_Renderer* renderer) {
@@ -148,7 +109,6 @@ void game::spawnpipe(SDL_Texture* pipeTexture) {
     // Ống dưới
     pipes.push_back(pipe(pipeX, topHeight + gap, pipeTexture));
 }
-#include <SDL_ttf.h>
 
 void game::renderScore(SDL_Renderer* renderer, int score) {
     TTF_Font* font = TTF_OpenFont("arial.ttf", 24); // Mở font Arial, cỡ 24px
@@ -184,11 +144,12 @@ void game::update() {
 bool game::checkcollision(const bird& b, const pipe& p) const {
     return SDL_HasIntersection(&b.birdRect, &p.pipeRect);
 }
-bool game::checkGameOver(SDL_Texture* gameover, SDL_Renderer* renderer, bool& running) {
+bool game::checkGameOver(SDL_Texture* gameover,Mix_Chunk* hitSound, SDL_Renderer* renderer, bool& running) {
     // Kiểm tra va chạm với ống hoặc rơi khỏi màn hình
     for (const auto& p : pipes) {
         if (checkcollision(flappy, p) || flappy.birdRect.y > SCREEN_HEIGHT) {
-                playSound(hitSound);
+               audio.playSound(hitSound);
+
             // Hiển thị Game Over
             SDL_RenderCopy(renderer, gameover, NULL, NULL);
             SDL_RenderPresent(renderer);
@@ -226,9 +187,9 @@ void game::restartGame(SDL_Renderer* renderer, SDL_Texture* background, SDL_Text
     // Bắt đầu lại vòng lặp
     running = true;
 }
-void game::cleanup(SDL_Texture* background, SDL_Texture* birdTexture, SDL_Texture* pipeTexture, SDL_Texture* gameover,
-                   Mix_Chunk* flapSound, Mix_Chunk* hitSound, Mix_Music* backgroundmusic,
-                   SDL_Window* window, SDL_Renderer* renderer) {
+void game::cleanup(SDL_Texture* background, SDL_Texture* birdTexture, SDL_Texture* pipeTexture,
+                   SDL_Texture* gameover, Mix_Chunk* flapSound, Mix_Chunk* hitSound,
+                   Mix_Music* backgroundMusic, SDL_Window* window, SDL_Renderer* renderer) {
     // Giải phóng các texture
     SDL_DestroyTexture(background);
     SDL_DestroyTexture(birdTexture);
@@ -238,12 +199,12 @@ void game::cleanup(SDL_Texture* background, SDL_Texture* birdTexture, SDL_Textur
     // Giải phóng âm thanh
     Mix_FreeChunk(flapSound);
     Mix_FreeChunk(hitSound);
-    Mix_FreeMusic(backgroundmusic);
+    Mix_FreeMusic(backgroundMusic);
 
+    // Đóng SDL_mixer
     Mix_CloseAudio();
 
     // Giải phóng SDL
     quitSDL(window, renderer);
 }
-
 

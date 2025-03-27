@@ -4,7 +4,7 @@
 pipe ::pipe(int _x,int _y,SDL_Texture *_texture){
     x=_x;
     y=_y;
-    width=150;
+    width=50;
     height=300;
     texture=_texture;
       passed = false; // Chưa được vượt qua

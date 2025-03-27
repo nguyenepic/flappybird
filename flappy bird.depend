@@ -7,7 +7,7 @@
 	<SDL.h>
 	<SDL_image.h>
 
-1742826280 source:d:\uet\ltnc\true game\flappy bird\pipe.cpp
+1743045676 source:d:\uet\ltnc\true game\flappy bird\pipe.cpp
 	"pipe.h"
 	<cstdlib>
 	<vector>
@@ -17,14 +17,16 @@
 	<SDL_image.h>
 	<vector>
 
-1742825720 source:d:\uet\ltnc\true game\flappy bird\game.cpp
+1743088266 source:d:\uet\ltnc\true game\flappy bird\game.cpp
+	<SDL_ttf.h>
 	<iostream>
 	<cstdlib>
 	<algorithm>
 	"game.h"
-	<SDL_ttf.h>
 
-1742704448 d:\uet\ltnc\true game\flappy bird\game.h
+1743088549 d:\uet\ltnc\true game\flappy bird\game.h
+	"graphic.h"
+	"audio.h"
 	"bird.h"
 	"pipe.h"
 	<SDL.h>
@@ -33,9 +35,20 @@
 	<SDL_ttf.h>
 	<vector>
 
-1742704447 source:d:\uet\ltnc\true game\flappy bird\main.cpp
+1743088347 source:d:\uet\ltnc\true game\flappy bird\main.cpp
 	"game.h"
+	"audio.h"
 	<SDL.h>
 	<iostream>
 	<algorithm>
+
+1743086484 d:\uet\ltnc\true game\flappy bird\audio.h
+	<SDL_mixer.h>
+
+1743087923 source:d:\uet\ltnc\true game\flappy bird\audio.cpp
+	"audio.h"
+	<SDL.h>
+	<iostream>
+
+1743088482 d:\uet\ltnc\true game\flappy bird\graphic.h
 

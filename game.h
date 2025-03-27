@@ -1,6 +1,8 @@
+
 #ifndef GAME_H
 #define GAME_H
-
+#include "graphic.h"
+#include "audio.h"
 #include "bird.h"
 #include "pipe.h"
 #include <SDL.h>
@@ -12,20 +14,14 @@
     const int SCREEN_HEIGHT = 600;
 struct game {
     const char* WINDOW_TITLE = "flappy bird";
-    Mix_Chunk* flapSound;
-    Mix_Chunk* hitSound;
-    Mix_Music* backgroundmusic;
-    Mix_Chunk* getFlapSound() const;
-    Mix_Chunk* getHitSound() const;
-    Mix_Music* getBackgroundMusic() const;
-
+      Audio audio; // Thêm biến này để gọi các hàm trong Audio
       game();  // Thêm constructor mặc định
     game(SDL_Texture* birdTexture);  // Constructor có tham số
     bool loadAllTextures(SDL_Renderer* renderer, SDL_Texture*& background, SDL_Texture*& birdTexture, SDL_Texture*& pipeTexture, SDL_Texture*& gameover);
-     void loadSound();
+
      void playBackgroundMusic(Mix_Music* music);
-    void playSound(Mix_Chunk* sound);
-    bool loadSounds();
+
+
     bool running;
     bool isrunning() { return running; }
     void logErrorAndExit(const char* msg, const char* error);
@@ -33,21 +29,23 @@ struct game {
     SDL_Renderer* createRenderer(SDL_Window* window);
     void quitSDL(SDL_Window* window, SDL_Renderer* renderer);
     void waitUntilKeyPressed();
-    void handleEvent(bool& running);
+    void handleEvent(bool& running,Mix_Chunk* flapSound);
     std::vector<pipe> pipes;
     void spawnpipe(SDL_Texture* pipeTexture);
     void renderScore(SDL_Renderer* renderer, int score);
     void update();
     bool checkcollision(const bird& b, const pipe& p) const;
-    bool checkGameOver(SDL_Texture* gameover, SDL_Renderer* renderer, bool& running);
+    bool checkGameOver(SDL_Texture* gameover,Mix_Chunk* hitSound, SDL_Renderer* renderer, bool& running);
 
     SDL_Rect srcplayer, destplayer;
     SDL_Texture* background;
     void renderTexture(SDL_Texture* texture, int x, int y, SDL_Renderer* renderer);
     SDL_Texture* loadTexture(const char* filename, SDL_Renderer* renderer);
-    void cleanup(SDL_Texture* background, SDL_Texture* birdTexture, SDL_Texture* pipeTexture, SDL_Texture* gameover,
-                   Mix_Chunk* flapSound, Mix_Chunk* hitSound, Mix_Music* backgroundmusic,
-                   SDL_Window* window, SDL_Renderer* renderer);
+  void cleanup(SDL_Texture* background, SDL_Texture* birdTexture, SDL_Texture* pipeTexture,
+             SDL_Texture* gameover, Mix_Chunk* flapSound, Mix_Chunk* hitSound,
+             Mix_Music* backgroundMusic, SDL_Window* window, SDL_Renderer* renderer);
+
+
     void restartGame(SDL_Renderer* renderer, SDL_Texture* background, SDL_Texture* birdTexture,
                  SDL_Texture* pipeTexture, SDL_Texture* gameover);
 
