@@ -17,7 +17,7 @@
 	<SDL_image.h>
 	<vector>
 
-1743093495 source:d:\uet\ltnc\true game\flappy bird\game.cpp
+1743094156 source:d:\uet\ltnc\true game\flappy bird\game.cpp
 	"game.h"
 	<SDL_ttf.h>
 	<cstdlib>
@@ -32,7 +32,7 @@
 	"pipe.h"
 	<vector>
 
-1743093480 source:d:\uet\ltnc\true game\flappy bird\main.cpp
+1743093804 source:d:\uet\ltnc\true game\flappy bird\main.cpp
 	"game.h"
 	"audio.h"
 	"graphic.h"
