@@ -1,160 +1,101 @@
-#include <SDL_ttf.h>
-#include <iostream>
-#include <cstdlib>
-#include<algorithm>
 #include "game.h"
+#include <SDL_ttf.h>
+#include <cstdlib>
+#include <algorithm>
+#include<string>
 using namespace std;
 game::game(SDL_Texture* birdTexture)
-    : flappy(100, 250, birdTexture)  {
+    : flappy(100, 250, birdTexture) {
     running = true;
 }
-void game::logErrorAndExit(const char* msg, const char* error) {
-    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, "%s: %s", msg, error);
-    SDL_Quit();
-    exit(EXIT_FAILURE);
-}
-SDL_Window* game::initSDL() {
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-        logErrorAndExit("SDL_Init", SDL_GetError());
 
-    SDL_Window* window = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-    if (window == nullptr) logErrorAndExit("CreateWindow", SDL_GetError());
-
-    if (!IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG))
-        logErrorAndExit("SDL_image error:", IMG_GetError());
-
-    // Khởi tạo SDL_ttf
-    if (TTF_Init() == -1) {
-        logErrorAndExit("SDL_ttf could not initialize!", TTF_GetError());
-    }
-
-    return window;
-}
-
-SDL_Renderer* game::createRenderer(SDL_Window* window) {
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-    if (renderer == nullptr) logErrorAndExit("CreateRenderer", SDL_GetError());
-
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-    SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-    return renderer;
-}
-bool game::loadAllTextures(SDL_Renderer* renderer, SDL_Texture*& background, SDL_Texture*& birdTexture, SDL_Texture*& pipeTexture, SDL_Texture*& gameover) {
-    background = loadTexture("background.jpg", renderer);
-    birdTexture = loadTexture("bird.png", renderer);
-    pipeTexture = loadTexture("pipe.png", renderer);
-    gameover = loadTexture("gameover.png", renderer);
-
-    if (!background || !birdTexture || !pipeTexture || !gameover) {
-        SDL_Log("Failed to load images!");
-        return false;
-    }
-    return true;
-}
-void game::quitSDL(SDL_Window* window, SDL_Renderer* renderer) {
-    IMG_Quit();
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-}
-
-void game::waitUntilKeyPressed() {
-    SDL_Event e;
-    while (true) {
-        if (SDL_PollEvent(&e) != 0 && (e.type == SDL_KEYDOWN || e.type == SDL_QUIT))
-            return;
-        SDL_Delay(100);
-    }
-}
-void game::handleEvent(bool& running,Mix_Chunk* flapSound) {
+void game::handleEvent(bool& running, Mix_Chunk* flapSound) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             running = false;
         } else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE) {
             flappy.jump();
-
             audio.playSound(flapSound);
         }
     }
 }
 
-
-
-void game::renderTexture(SDL_Texture* texture, int x, int y, SDL_Renderer* renderer) {
-    SDL_Rect dest = {x, y, 0, 0};
-    SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
-    SDL_RenderCopy(renderer, texture, NULL, &dest);
-}
-
-SDL_Texture* game::loadTexture(const char* filename, SDL_Renderer* renderer) {
-    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", filename);
-
-    SDL_Texture* texture = IMG_LoadTexture(renderer, filename);
-    if (texture == NULL)
-        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, "Load texture %s", IMG_GetError());
-
-    return texture;
-}
 void game::spawnpipe(SDL_Texture* pipeTexture) {
     double pipeX = SCREEN_WIDTH;
-    double gap = 210; // Khoảng trống giữa hai ống
-    double topHeight = rand() % 150 + 100; // Chiều cao ống trên
+    double gap = 210;
+    double topHeight = rand() % 150 + 100;
 
-    // Ống trên
     pipes.push_back(pipe(pipeX, topHeight - 300, pipeTexture));
-
-    // Ống dưới
     pipes.push_back(pipe(pipeX, topHeight + gap, pipeTexture));
 }
 
 void game::renderScore(SDL_Renderer* renderer, int score) {
-    TTF_Font* font = TTF_OpenFont("arial.ttf", 24); // Mở font Arial, cỡ 24px
+    TTF_Font* font = TTF_OpenFont("arial.ttf", 24);
     if (!font) {
-        cout << "Failed to load font: " << TTF_GetError() << endl;
+        SDL_Log("ERROR: Failed to load font: %s", TTF_GetError());
         return;
     }
 
-    SDL_Color textColor = {255, 255, 255}; // Màu trắng
-    string scoreText = "Score: " + to_string(score);
+    SDL_Color textColor = {255, 255, 255};
+    string scoreText = "Score: " + std::to_string(score);
 
     SDL_Surface* textSurface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);
     if (!textSurface) {
-        cout << "Failed to create text surface: " << TTF_GetError() << endl;
+        SDL_Log("ERROR: Failed to create text surface: %s", TTF_GetError());
         TTF_CloseFont(font);
         return;
     }
 
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-    SDL_Rect textRect = {10, 10, textSurface->w, textSurface->h}; // Vị trí góc trái trên
+    if (!textTexture) {
+        SDL_Log("ERROR: Failed to create text texture: %s", SDL_GetError());
+        SDL_FreeSurface(textSurface);
+        TTF_CloseFont(font);
+        return;
+    }
 
-    SDL_RenderCopy(renderer, textTexture, nullptr, &textRect); // Vẽ lên màn hình
+    SDL_Rect textRect = {10, 10, textSurface->w, textSurface->h};
+    SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
 
     SDL_FreeSurface(textSurface);
     SDL_DestroyTexture(textTexture);
     TTF_CloseFont(font);
 }
 
-void game::update() {
-    srcplayer = {0, 0, 80, 60};
-    destplayer = {20, 20, 60, 80};
-}
 bool game::checkcollision(const bird& b, const pipe& p) const {
     return SDL_HasIntersection(&b.birdRect, &p.pipeRect);
 }
-bool game::checkGameOver(SDL_Texture* gameover,Mix_Chunk* hitSound, SDL_Renderer* renderer, bool& running) {
-    // Kiểm tra va chạm với ống hoặc rơi khỏi màn hình
+
+bool game::checkGameOver(SDL_Renderer* renderer, SDL_Texture* gameover,SDL_Texture *background,int score, Mix_Chunk* hitSound, bool& running) {
     for (const auto& p : pipes) {
         if (checkcollision(flappy, p) || flappy.birdRect.y > SCREEN_HEIGHT) {
-               audio.playSound(hitSound);
+            audio.playSound(hitSound);
 
-            // Hiển thị Game Over
-            SDL_RenderCopy(renderer, gameover, NULL, NULL);
-            SDL_RenderPresent(renderer);
+            // Hiển thị lại toàn bộ khung hình trước khi vẽ Game Over
+            SDL_RenderClear(renderer);
 
-            // Chờ người chơi nhấn phím
+// Vẽ lại background trước
+SDL_RenderCopy(renderer, background, nullptr, nullptr);
+
+// Vẽ lại các vật thể khác
+for (const auto& p : pipes) {
+    p.render(renderer);
+}
+
+flappy.render(renderer);
+renderScore(renderer, score); // Hiển thị điểm số
+
+// Hiển thị Game Over ở giữa màn hình
+            SDL_Rect goRect = { (SCREEN_WIDTH - 400) / 2, (SCREEN_HEIGHT - 200) / 2, 400, 200 };
+            SDL_RenderCopy(renderer, gameover, nullptr, &goRect);
+             SDL_RenderPresent(renderer);
+
+
+            // Đợi 1.5 giây trước khi cho phép restart
+            SDL_Delay(100);
+
+            // Chờ phím nhấn từ người chơi
             SDL_Event event;
             while (true) {
                 while (SDL_PollEvent(&event)) {
@@ -164,10 +105,10 @@ bool game::checkGameOver(SDL_Texture* gameover,Mix_Chunk* hitSound, SDL_Renderer
                     }
                     if (event.type == SDL_KEYDOWN) {
                         if (event.key.keysym.sym == SDLK_ESCAPE) {
-                            running = false;  // Thoát game
+                            running = false;
                             return true;
-                        } else {
-                            return true;  // Nhấn phím khác để restart
+                        } else if (event.key.keysym.sym == SDLK_SPACE) {
+                            return true; // Nhấn SPACE để restart
                         }
                     }
                 }
@@ -175,36 +116,30 @@ bool game::checkGameOver(SDL_Texture* gameover,Mix_Chunk* hitSound, SDL_Renderer
             }
         }
     }
-    return false;  // Chưa game over
+    return false;
 }
-void game::restartGame(SDL_Renderer* renderer, SDL_Texture* background, SDL_Texture* birdTexture, SDL_Texture* pipeTexture, SDL_Texture* gameover) {
-    // Reset vị trí chim
+
+
+void game::restartGame(SDL_Texture* birdTexture) {
     flappy = bird(100, 250, birdTexture);
-
-    // Xóa tất cả ống
     pipes.clear();
-
-    // Bắt đầu lại vòng lặp
     running = true;
+    SDL_Log("Game restarted.");
 }
+
 void game::cleanup(SDL_Texture* background, SDL_Texture* birdTexture, SDL_Texture* pipeTexture,
                    SDL_Texture* gameover, Mix_Chunk* flapSound, Mix_Chunk* hitSound,
-                   Mix_Music* backgroundMusic, SDL_Window* window, SDL_Renderer* renderer) {
-    // Giải phóng các texture
+                   Mix_Music* backgroundMusic) {
     SDL_DestroyTexture(background);
     SDL_DestroyTexture(birdTexture);
     SDL_DestroyTexture(pipeTexture);
     SDL_DestroyTexture(gameover);
 
-    // Giải phóng âm thanh
     Mix_FreeChunk(flapSound);
     Mix_FreeChunk(hitSound);
     Mix_FreeMusic(backgroundMusic);
 
-    // Đóng SDL_mixer
     Mix_CloseAudio();
-
-    // Giải phóng SDL
-    quitSDL(window, renderer);
+    graphic.cleanup();
+    SDL_Log("Game resources cleaned up.");
 }
-

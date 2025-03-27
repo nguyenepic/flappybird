@@ -1,25 +1,34 @@
 #include "game.h"
 #include "audio.h"
+#include "graphic.h"
 #include <SDL.h>
-#include <iostream>
 #include <algorithm>
-using namespace std;
 
 int main(int argc, char* argv[]) {
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    game flappyGame(nullptr);
+    Graphic graphic;
     Audio audio;
 
-    window = flappyGame.initSDL();
-    renderer = flappyGame.createRenderer(window);
+    // Khởi tạo SDL và tạo cửa sổ + renderer
+    graphic.initSDL();
+    graphic.createRenderer(graphic.window);
 
-    SDL_Texture *background, *birdTexture, *pipeTexture, *gameover;
-    if (!flappyGame.loadAllTextures(renderer, background, birdTexture, pipeTexture, gameover)) {
+    // Load các texture
+    SDL_Texture *background = graphic.loadTexture("background.jpg");
+    SDL_Texture *birdTexture = graphic.loadTexture("bird.png");
+    SDL_Texture *pipeTexture = graphic.loadTexture("pipe.png");
+    SDL_Texture *gameover = graphic.loadTexture("gameover.png");
+
+    if (!gameover) {
+        SDL_Log("ERROR: Failed to load gameover image: %s", IMG_GetError());
+    }
+
+    if (!background || !birdTexture || !pipeTexture || !gameover) {
+        SDL_Log("ERROR: Failed to load textures!");
         return -1;
     }
 
-    if (!audio.loadSounds()) {  // Sử dụng audio thay vì flappyGame.loadSounds()
+    // Load âm thanh
+    if (!audio.loadSounds()) {
         SDL_Log("ERROR: Failed to load sounds!");
         return -1;
     }
@@ -28,12 +37,14 @@ int main(int argc, char* argv[]) {
     Mix_VolumeMusic(MIX_MAX_VOLUME);
     Mix_PlayMusic(audio.getBackgroundMusic(), -1);
 
+    game flappyGame(birdTexture);
+    flappyGame.restartGame(birdTexture);
+
     int score = 0;
-    flappyGame.restartGame(renderer, background, birdTexture, pipeTexture, gameover);
     bool running = true;
 
     while (running) {
-        flappyGame.handleEvent(running,audio.flapSound);
+        flappyGame.handleEvent(running, audio.getFlapSound());
 
         flappyGame.flappy.update();
         flappyGame.flappy.keepInRange();
@@ -46,13 +57,20 @@ int main(int argc, char* argv[]) {
             p.update(5);
         }
 
-        flappyGame.pipes.erase(remove_if(flappyGame.pipes.begin(), flappyGame.pipes.end(),
-                                         [](const pipe& p) { return p.isOffScreen(); }), flappyGame.pipes.end());
+        flappyGame.pipes.erase(std::remove_if(flappyGame.pipes.begin(), flappyGame.pipes.end(),
+                                              [](const pipe& p) { return p.isOffScreen(); }),
+                               flappyGame.pipes.end());
 
-        if (flappyGame.checkGameOver(gameover,audio.hitSound, renderer, running)) {
+        if (flappyGame.checkGameOver(graphic.renderer, gameover,background,score, audio.getHitSound(), running)) {
             if (!running) break;
+
+            SDL_Log("Game Over! Restarting...");
+
+
+            SDL_Delay(100);  // Hiển thị Game Over trong 1.5 giây trước khi restart
+
             score = 0;
-            flappyGame.restartGame(renderer, background, birdTexture, pipeTexture, gameover);
+            flappyGame.restartGame(birdTexture);
             continue;
         }
 
@@ -64,20 +82,26 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        SDL_RenderClear(renderer);
-        flappyGame.renderTexture(background, 0, 0, renderer);
-        flappyGame.flappy.render(renderer);
+        // Render game
+        SDL_RenderClear(graphic.renderer);
+
+        SDL_Rect bgRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+        SDL_RenderCopy(graphic.renderer, background, nullptr, &bgRect);
+        flappyGame.flappy.render(graphic.renderer);
+
         for (const auto& p : flappyGame.pipes) {
-            p.render(renderer);
+            p.render(graphic.renderer);
         }
-        flappyGame.renderScore(renderer, score);
-        SDL_RenderPresent(renderer);
+
+        flappyGame.renderScore(graphic.renderer, score);
+        SDL_RenderPresent(graphic.renderer);
         SDL_Delay(16);
     }
 
     TTF_Quit();
     flappyGame.cleanup(background, birdTexture, pipeTexture, gameover,
                        audio.getFlapSound(), audio.getHitSound(),
-                       audio.getBackgroundMusic(), window, renderer);
+                       audio.getBackgroundMusic());
+
     return 0;
 }
