@@ -38,53 +38,55 @@ int main(int argc, char* argv[]) {
     bool running = true;
 
     while (running) {
-        flappyGame.handleEvent(running, audio.getFlapSound(),graphic.renderer);
+    flappyGame.handleEvent(running, audio.getFlapSound(), graphic.renderer,score);
 
-        if (!running) break; // Nếu menu chọn Quit, thoát game ngay
+    if (!running) break; // Nếu menu chọn Quit, thoát game ngay
 
-        flappyGame.flappy.update();
-        flappyGame.flappy.keepInRange();
+    flappyGame.flappy.update();
+    flappyGame.flappy.keepInRange();
 
-        if (flappyGame.pipes.empty() || flappyGame.pipes.back().x < SCREEN_WIDTH - 200) {
-            flappyGame.spawnpipe(pipeTexture);
-        }
-
-        for (auto& p : flappyGame.pipes) {
-            p.update(5);
-        }
-
-        flappyGame.pipes.erase(std::remove_if(flappyGame.pipes.begin(), flappyGame.pipes.end(),
-                                              [](const pipe& p) { return p.isOffScreen(); }),
-                               flappyGame.pipes.end());
-
-        if (flappyGame.checkGameOver(graphic.renderer, gameover, background, score, audio.getHitSound(), running)) {
-            score = 0;
-            flappyGame.restartGame(birdTexture);
-            continue;
-        }
-
-        for (auto& p : flappyGame.pipes) {
-            if (!p.passed && p.x + p.width < flappyGame.flappy.x && p.y > 0) {
-                score++;
-                p.passed = true;
-            }
-        }
-
-        SDL_RenderClear(graphic.renderer);
-        SDL_Rect bgRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-        SDL_RenderCopy(graphic.renderer, background, nullptr, &bgRect);
-
-        // Render bird với animation
-        flappyGame.flappy.renderAnimation(graphic.renderer);
-
-        for (const auto& p : flappyGame.pipes) {
-            p.render(graphic.renderer);
-        }
-
-        flappyGame.renderScore(graphic.renderer, score);
-        SDL_RenderPresent(graphic.renderer);
-        SDL_Delay(16); // Khoảng 60 FPS
+    if (flappyGame.pipes.empty() || flappyGame.pipes.back().x < SCREEN_WIDTH - 200) {
+        flappyGame.spawnpipe(pipeTexture);
     }
+
+    for (auto& p : flappyGame.pipes) {
+        p.update(5);
+    }
+
+    flappyGame.pipes.erase(std::remove_if(flappyGame.pipes.begin(), flappyGame.pipes.end(),
+                                          [](const pipe& p) { return p.isOffScreen(); }),
+                           flappyGame.pipes.end());
+
+
+    if (flappyGame.checkGameOver(graphic.renderer, gameover, background, score, audio.getHitSound(), running)) {
+        score = 0;
+        flappyGame.restartGame(birdTexture);
+        continue;
+    }
+
+    for (auto& p : flappyGame.pipes) {
+        if (!p.passed && p.x + p.width < flappyGame.flappy.x && p.y > 0) {
+            score++;
+            p.passed = true;
+        }
+    }
+
+    SDL_RenderClear(graphic.renderer);
+    SDL_Rect bgRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+    SDL_RenderCopy(graphic.renderer, background, nullptr, &bgRect);
+
+    // Render bird với animation
+    flappyGame.flappy.renderAnimation(graphic.renderer);
+
+    for (const auto& p : flappyGame.pipes) {
+        p.render(graphic.renderer);
+    }
+
+    flappyGame.renderScore(graphic.renderer, score);
+    SDL_RenderPresent(graphic.renderer);
+    SDL_Delay(16); // Khoảng 60 FPS
+}
+
 
     TTF_Quit();
     flappyGame.cleanup(background, birdTexture, pipeTexture, gameover,

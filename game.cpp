@@ -1,4 +1,5 @@
 
+
 #include "game.h"
 #include <SDL_ttf.h>
 #include <cstdlib>
@@ -12,7 +13,7 @@ game::game(SDL_Texture* birdTexture)
     running = true;
 }
 
-void game::handleEvent(bool& running, Mix_Chunk* flapSound,SDL_Renderer *renderer) {
+void game::handleEvent(bool& running, Mix_Chunk* flapSound, SDL_Renderer* renderer,int &score) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
@@ -22,12 +23,17 @@ void game::handleEvent(bool& running, Mix_Chunk* flapSound,SDL_Renderer *rendere
                 flappy.jump();
                 audio.playSound(flapSound);
             } else if (event.key.keysym.sym == SDLK_ESCAPE) {
-                showMenu(running,renderer);
+                bool restart = showMenu(running, renderer);
+                if (restart) {
+                        score=0;
+                    restartGame(flappy.texture);
+                }
             }
         }
     }
 }
-void game::showMenu(bool& running,SDL_Renderer* renderer) {
+
+bool game::showMenu(bool& running, SDL_Renderer* renderer) {
     bool inMenu = true;
     int selectedOption = 0;
     const string menuText[] = {"Continue", "Restart", "Quit"};
@@ -48,8 +54,8 @@ void game::showMenu(bool& running,SDL_Renderer* renderer) {
                     if (selectedOption == 0) { // Continue
                         inMenu = false;
                     } else if (selectedOption == 1) { // Restart
-                        restartGame(flappy.texture);
                         inMenu = false;
+                        return true; // Trả về true để báo restart
                     } else if (selectedOption == 2) { // Quit
                         running = false;
                         inMenu = false;
@@ -57,9 +63,11 @@ void game::showMenu(bool& running,SDL_Renderer* renderer) {
                 }
             }
         }
-        renderMenu(selectedOption,renderer);
+        renderMenu(selectedOption, renderer);
     }
+    return false; // Không restart
 }
+
 void game::renderMenu(int selectedOption,SDL_Renderer* renderer) {
     SDL_Color textColor = {255, 255, 255};
     SDL_Color highlightColor = {255, 0, 0};
