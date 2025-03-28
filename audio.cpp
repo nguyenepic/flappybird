@@ -33,7 +33,6 @@ void Audio::playSound(Mix_Chunk* sound) {
         SDL_Log("Sound is NULL, cannot play!");
     }
 }
-
 Mix_Chunk* Audio::getFlapSound() const { return flapSound; }
 Mix_Chunk* Audio::getHitSound() const { return hitSound; }
 Mix_Music* Audio::getBackgroundMusic() const { return backgroundMusic; }
