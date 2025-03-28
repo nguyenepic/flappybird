@@ -10,13 +10,9 @@ struct pipe{
     SDL_Texture *texture;
     SDL_Rect pipeRect;
     bool passed;
-    // Cập nhật vị trí ống nước
     void update(int speed);
-
-    // Vẽ ống nước
     void render(SDL_Renderer* renderer)const ;
 
-    // Kiểm tra nếu pipe ra khỏi màn hình
     bool isOffScreen()const ;
     pipe(int x, int y, SDL_Texture* texture);
 };

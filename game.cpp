@@ -1,3 +1,4 @@
+
 #include "game.h"
 #include <SDL_ttf.h>
 #include <cstdlib>
@@ -11,16 +12,75 @@ game::game(SDL_Texture* birdTexture)
     running = true;
 }
 
-void game::handleEvent(bool& running, Mix_Chunk* flapSound) {
+void game::handleEvent(bool& running, Mix_Chunk* flapSound,SDL_Renderer *renderer) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             running = false;
-        } else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE) {
-            flappy.jump();
-            audio.playSound(flapSound);
+        } else if (event.type == SDL_KEYDOWN) {
+            if (event.key.keysym.sym == SDLK_SPACE) {
+                flappy.jump();
+                audio.playSound(flapSound);
+            } else if (event.key.keysym.sym == SDLK_ESCAPE) {
+                showMenu(running,renderer);
+            }
         }
     }
+}
+void game::showMenu(bool& running,SDL_Renderer* renderer) {
+    bool inMenu = true;
+    int selectedOption = 0;
+    const string menuText[] = {"Continue", "Restart", "Quit"};
+    int menuSize = 3;
+
+    while (inMenu) {
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                running = false;
+                inMenu = false;
+            } else if (event.type == SDL_KEYDOWN) {
+                if (event.key.keysym.sym == SDLK_DOWN) {
+                    selectedOption = (selectedOption + 1) % menuSize;
+                } else if (event.key.keysym.sym == SDLK_UP) {
+                    selectedOption = (selectedOption - 1 + menuSize) % menuSize;
+                } else if (event.key.keysym.sym == SDLK_RETURN) {
+                    if (selectedOption == 0) { // Continue
+                        inMenu = false;
+                    } else if (selectedOption == 1) { // Restart
+                        restartGame(flappy.texture);
+                        inMenu = false;
+                    } else if (selectedOption == 2) { // Quit
+                        running = false;
+                        inMenu = false;
+                    }
+                }
+            }
+        }
+        renderMenu(selectedOption,renderer);
+    }
+}
+void game::renderMenu(int selectedOption,SDL_Renderer* renderer) {
+    SDL_Color textColor = {255, 255, 255};
+    SDL_Color highlightColor = {255, 0, 0};
+    TTF_Font* font = TTF_OpenFont("arial.ttf", 24);
+    if (!font) return;
+
+    const string menuText[] = {"Continue", "Restart", "Quit"};
+    SDL_Rect textRect = {SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 - 50, 200, 30};
+
+    for (int i = 0; i < 3; i++) {
+        SDL_Color color = (i == selectedOption) ? highlightColor : textColor;
+        SDL_Surface* surface = TTF_RenderText_Solid(font, menuText[i].c_str(), color);
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+        SDL_FreeSurface(surface);
+
+        SDL_RenderCopy(renderer, texture, nullptr, &textRect);
+        SDL_DestroyTexture(texture);
+        textRect.y += 40;
+    }
+    SDL_RenderPresent(renderer);
+    TTF_CloseFont(font);
 }
 
 void game::spawnpipe(SDL_Texture* pipeTexture) {

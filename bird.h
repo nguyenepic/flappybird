@@ -11,9 +11,8 @@ struct bird {
     double speed;
     double jumpstrength;
     SDL_Texture* texture;
-    SDL_Rect birdRect; // Định vị vị trí vẽ chim
+    SDL_Rect birdRect;
 
-    // Biến animation
     int frameIndex;       // Frame hiện tại
     Uint32 lastTime;      // Thời gian cập nhật frame gần nhất
 
@@ -28,18 +27,15 @@ struct bird {
         speed = 0;
         jumpstrength = 10;
         texture = nullptr;
-
         frameIndex = 0;
         lastTime = SDL_GetTicks();
     }
-
     void update();
     void falling();
     void jump();
     bool keepInRange();
     void render(SDL_Renderer* renderer);
 
-    // Animation
     void updateAnimation();
     void renderAnimation(SDL_Renderer* renderer);
 };

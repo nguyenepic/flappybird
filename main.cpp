@@ -38,7 +38,10 @@ int main(int argc, char* argv[]) {
     bool running = true;
 
     while (running) {
-        flappyGame.handleEvent(running, audio.getFlapSound());
+        flappyGame.handleEvent(running, audio.getFlapSound(),graphic.renderer);
+
+        if (!running) break; // Nếu menu chọn Quit, thoát game ngay
+
         flappyGame.flappy.update();
         flappyGame.flappy.keepInRange();
 

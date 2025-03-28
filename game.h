@@ -1,3 +1,4 @@
+
 #ifndef GAME_H
 #define GAME_H
 
@@ -14,11 +15,11 @@ struct game {
     Graphic graphic;
 
     game(SDL_Texture* birdTexture);
-
+    void showMenu(bool& running,SDL_Renderer* renderer);
     bool running;
     bool isrunning() { return running; }
-
-    void handleEvent(bool& running, Mix_Chunk* flapSound);
+    void renderMenu(int selectedOption,SDL_Renderer* renderer);
+    void handleEvent(bool& running, Mix_Chunk* flapSound,SDL_Renderer* renderer);
     void spawnpipe(SDL_Texture* pipeTexture);
     void renderScore(SDL_Renderer* renderer, int score);
     void update();
