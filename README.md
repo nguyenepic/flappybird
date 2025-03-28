@@ -14,7 +14,7 @@
 -SDL_ttf
 +https://www.iostream.co/article/draw-text-trong-sdl-iQnHh1
 -link bird
-+https://angrybirds.fandom.com/f/p/4400000000000090283
++https://www.google.com/url?sa=i&url=https%3A%2F%2Fdepositphotos.com%2Fvector%2Fflying-bird-animation-sprite-41783607.html&psig=AOvVaw0ER0uk0g_IttM-iVLRhZlM&ust=1743237957462000&source=images&cd=vfe&opi=89978449&ved=0CBgQ3YkBahcKEwjQjqGDtqyMAxUAAAAAHQAAAAAQBA
 -link pipe
 +https://www.pinterest.com/pin/flappy-bird-pipe-transparent-png-id-88709--848858229791970879/
 -link background
