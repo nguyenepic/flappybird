@@ -7,12 +7,9 @@
 int main(int argc, char* argv[]) {
     Graphic graphic;
     Audio audio;
-
-    // Khởi tạo SDL và tạo cửa sổ + renderer
     graphic.initSDL();
     graphic.createRenderer(graphic.window);
 
-    // Load các texture
     SDL_Texture *background = graphic.loadTexture("background.jpg");
     SDL_Texture *birdTexture = graphic.loadTexture("bird.png"); // Sprite sheet
     SDL_Texture *pipeTexture = graphic.loadTexture("pipe.png");
@@ -23,7 +20,6 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
-    // Load âm thanh
     if (!audio.loadSounds()) {
         SDL_Log("ERROR: Failed to load sounds!");
         return -1;
@@ -40,8 +36,7 @@ int main(int argc, char* argv[]) {
     while (running) {
     flappyGame.handleEvent(running, audio.getFlapSound(), graphic.renderer,score);
 
-    if (!running) break; // Nếu menu chọn Quit, thoát game ngay
-
+    if (!running) break;
     flappyGame.flappy.update();
     flappyGame.flappy.keepInRange();
 
@@ -52,17 +47,20 @@ int main(int argc, char* argv[]) {
     for (auto& p : flappyGame.pipes) {
         p.update(5);
     }
-
-    flappyGame.pipes.erase(std::remove_if(flappyGame.pipes.begin(), flappyGame.pipes.end(),
+    flappyGame.pipes.erase(remove_if(flappyGame.pipes.begin(), flappyGame.pipes.end(),
                                           [](const pipe& p) { return p.isOffScreen(); }),
                            flappyGame.pipes.end());
 
-
     if (flappyGame.checkGameOver(graphic.renderer, gameover, background, score, audio.getHitSound(), running)) {
-        score = 0;
+    bool restart = flappyGame.showMenu(running, graphic.renderer);
+
+    if (restart) {
+        score = 0; // Reset điểm số khi restart
         flappyGame.restartGame(birdTexture);
-        continue;
+    } else if (!running) {
+        break; // Nếu chọn "Quit", thoát khỏi vòng lặp game
     }
+}
 
     for (auto& p : flappyGame.pipes) {
         if (!p.passed && p.x + p.width < flappyGame.flappy.x && p.y > 0) {
@@ -70,28 +68,22 @@ int main(int argc, char* argv[]) {
             p.passed = true;
         }
     }
-
     SDL_RenderClear(graphic.renderer);
     SDL_Rect bgRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
     SDL_RenderCopy(graphic.renderer, background, nullptr, &bgRect);
 
-    // Render bird với animation
     flappyGame.flappy.renderAnimation(graphic.renderer);
 
     for (const auto& p : flappyGame.pipes) {
         p.render(graphic.renderer);
     }
-
     flappyGame.renderScore(graphic.renderer, score);
     SDL_RenderPresent(graphic.renderer);
     SDL_Delay(16); // Khoảng 60 FPS
 }
-
-
     TTF_Quit();
     flappyGame.cleanup(background, birdTexture, pipeTexture, gameover,
                        audio.getFlapSound(), audio.getHitSound(),
                        audio.getBackgroundMusic());
-
     return 0;
 }
