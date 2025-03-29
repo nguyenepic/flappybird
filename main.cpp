@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
     graphic.createRenderer(graphic.window);
 
     SDL_Texture *background = graphic.loadTexture("background.jpg");
-    SDL_Texture *birdTexture = graphic.loadTexture("bird.png"); // Sprite sheet
+    SDL_Texture *birdTexture = graphic.loadTexture("bird.png");
     SDL_Texture *pipeTexture = graphic.loadTexture("pipe.png");
     SDL_Texture *gameover = graphic.loadTexture("gameover.png");
 
@@ -55,10 +55,10 @@ int main(int argc, char* argv[]) {
     bool restart = flappyGame.showMenu(running, graphic.renderer);
 
     if (restart) {
-        score = 0; // Reset điểm số khi restart
+        score = 0;
         flappyGame.restartGame(birdTexture);
     } else if (!running) {
-        break; // Nếu chọn "Quit", thoát khỏi vòng lặp game
+        break;
     }
 }
 

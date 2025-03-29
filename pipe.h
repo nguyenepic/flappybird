@@ -17,6 +17,5 @@ struct pipe{
     bool isOffScreen()const ;
     pipe(int x, int y, SDL_Texture* texture);
 };
-// Hàm tạo ống nước mới và thêm vào danh sách
 
 #endif // PIPE_H

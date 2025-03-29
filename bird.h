@@ -16,10 +16,7 @@ struct bird {
     int frameIndex;       // Frame hiện tại
     Uint32 lastTime;      // Thời gian cập nhật frame gần nhất
 
-    // Constructor có tham số
     bird(int _x, int _y, SDL_Texture* _texture);
-
-    // Constructor mặc định
     bird() {
         x = 0;
         y = 0;

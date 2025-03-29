@@ -157,7 +157,7 @@ bool game::checkGameOver(SDL_Renderer* renderer, SDL_Texture* gameover, SDL_Text
 
             SDL_Delay(100); // Delay ngắn trước khi nhận input
 
-            // Chờ phím nhấn từ người chơi (Timeout tránh treo game)
+            // Chờ phím nhấn từ người chơi
             Uint32 startTime = SDL_GetTicks();
             SDL_Event event;
 

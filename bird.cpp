@@ -11,7 +11,6 @@ bird::bird(int _x, int _y, SDL_Texture *birdTexture) {
     jumpstrength = -10;
     texture = birdTexture;
 
-    // Lấy kích thước thật của texture
     int texW, texH;
     SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
 
@@ -23,7 +22,6 @@ bird::bird(int _x, int _y, SDL_Texture *birdTexture) {
     birdRect.w = FRAME_WIDTH/3;
     birdRect.h = FRAME_HEIGHT/3;
 
-    // Khởi tạo animation
     frameIndex = 0;
     lastTime = SDL_GetTicks();
 }
