@@ -39,15 +39,15 @@ int main(int argc, char* argv[]) {
     if (!running) break;
     flappyGame.flappy.update();
     flappyGame.flappy.keepInRange();
-
+     //nếu chưa có ống nào hoặc ống cuối cùng cách xa 200px thì thêm ống mới
     if (flappyGame.pipes.empty() || flappyGame.pipes.back().x < SCREEN_WIDTH - 200) {
         flappyGame.spawnpipe(pipeTexture);
     }
 
     for (auto& p : flappyGame.pipes) {
-        p.update(5);
+        p.update(5);//di chuyển tất cả ống nước sang trái với 5px mỗi frame
     }
-    flappyGame.pipes.erase(remove_if(flappyGame.pipes.begin(), flappyGame.pipes.end(),
+    flappyGame.pipes.erase(remove_if(flappyGame.pipes.begin(), flappyGame.pipes.end(),//xóa các ống ra khỏi màn hình
                                           [](const pipe& p) { return p.isOffScreen(); }),
                            flappyGame.pipes.end());
 
@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
     }
     flappyGame.renderScore(graphic.renderer, score);
     SDL_RenderPresent(graphic.renderer);
-    SDL_Delay(16); // Khoảng 60 FPS
+    SDL_Delay(16);
 }
     TTF_Quit();
     flappyGame.cleanup(background, birdTexture, pipeTexture, gameover,

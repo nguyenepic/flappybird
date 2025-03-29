@@ -33,43 +33,40 @@ void bird::update() {
     updateAnimation();
 }
 
-// Chim rơi xuống do trọng lực
 void bird::falling() {
-    speed += gravity;
-    y += speed;
+    speed += gravity;//speed tăng dần do trọng lực,khiến chim ngày càng rơi nhanh hơn
+    y += speed;//cập nhật vị trí chim theo tốc độ rơi
     if (y > SCREEN_HEIGHT) {
-    // Khi chim rơi khỏi màn hình, không giới hạn, cho phép biến mất
-    birdRect.y = SCREEN_HEIGHT + 100; // Đưa ra ngoài màn hình
+    birdRect.y = SCREEN_HEIGHT + 100; // Đưa ra ngoài màn hình nếu chim rơi ra ngoài màn hình
 }
 
     birdRect.x = x;
     birdRect.y = y;
 }
-// Chim nhảy lên
+
 void bird::jump() {
-    speed = jumpstrength;
+    speed = jumpstrength;//tốc độ rơi sẽ bị giảm về jumpsrength làm chim di chuyển lên trên
 }
 
-// Giữ chim trong màn hình
 bool bird::keepInRange() {
     if (birdRect.y < 0) {
         birdRect.y = 0;
-        speed=0;
-        return false; // Chim chạm trần
+        speed=0;//ngăn chim đi lên
+        return false;
     }
     return true;
 }
 
 void bird::updateAnimation() {
-    Uint32 currentTime = SDL_GetTicks();
-    if (currentTime - lastTime >= ANIMATION_SPEED) { // Sửa lỗi logic
-        frameIndex = (frameIndex + 1) % TOTAL_FRAMES;
+    Uint32 currentTime = SDL_GetTicks();//lấy thời gian hiện tại
+    if (currentTime - lastTime >= ANIMATION_SPEED) {//kiểm tra đến lúc chuyển frame chưa
+        frameIndex = (frameIndex + 1) % TOTAL_FRAMES;//vòng lặp các frame, chuyển về frame đầu tiên khi đến frame cuối
         lastTime = currentTime;
     }
 }
 
 void bird::renderAnimation(SDL_Renderer* renderer) {
-    SDL_Rect srcRect = {frameIndex * FRAME_WIDTH, 0, FRAME_WIDTH, FRAME_HEIGHT};
+    SDL_Rect srcRect = {frameIndex * FRAME_WIDTH, 0, FRAME_WIDTH, FRAME_HEIGHT};//frameindex*frame_width :cắt ra phần tương ứng với frame hiện tại,y=0 do frame xếp ngang
     SDL_RenderCopy(renderer, texture, &srcRect, &birdRect);
 }
 

@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 const int TOTAL_FRAMES = 4;
-const int ANIMATION_SPEED = 100;
+const int ANIMATION_SPEED = 100;//mỗi 0,1 giây hiển thị 1 frame
 struct bird {
     int x, y;
     double gravity;

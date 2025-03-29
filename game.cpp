@@ -85,7 +85,7 @@ void game::renderMenu(int selectedOption,SDL_Renderer* renderer) {
 
         SDL_RenderCopy(renderer, texture, nullptr, &textRect);
         SDL_DestroyTexture(texture);
-        textRect.y += 40;
+        textRect.y += 40;//dịch xuống 40px để vẽ dòng tiếp theo
     }
     SDL_RenderPresent(renderer);
     TTF_CloseFont(font);
@@ -93,10 +93,10 @@ void game::renderMenu(int selectedOption,SDL_Renderer* renderer) {
 
 void game::spawnpipe(SDL_Texture* pipeTexture) {
     double pipeX = SCREEN_WIDTH;
-    double gap = 210;
-    double topHeight = rand() % 150 + 100;
+    double gap = 210;//khoảng cách 2 ống
+    double topHeight = rand() % 150 + 100;//chiều cao ngẫu nhiên
 
-    pipes.push_back(pipe(pipeX, topHeight - 300, pipeTexture));
+    pipes.push_back(pipe(pipeX, topHeight - 300, pipeTexture));//topheight-300:đảm bảo ống nước trên được đặt đúng vị trí vì chiều cao chuẩn là 300
     pipes.push_back(pipe(pipeX, topHeight + gap, pipeTexture));
 }
 
@@ -110,15 +110,15 @@ void game::renderScore(SDL_Renderer* renderer, int score) {
     SDL_Color textColor = {255, 255, 255}; // Trắng
     string scoreText = "Score: " + to_string(score);
 
-    SDL_Surface* textSurface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);
+    SDL_Surface* textSurface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);//menuText[i].c_str :chuyển nội dung thành char
     if (!textSurface) {
         SDL_Log("ERROR: Failed to create text surface: %s", TTF_GetError());
         TTF_CloseFont(font);
         return;
     }
-
+     //surface là dạng trung gian ,cần chuyển sang Texture để hiện thị
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-    SDL_FreeSurface(textSurface); // Giải phóng ngay sau khi tạo texture
+    SDL_FreeSurface(textSurface);
 
     if (!textTexture) {
         SDL_Log("ERROR: Failed to create text texture: %s", SDL_GetError());
@@ -145,7 +145,7 @@ bool game::checkGameOver(SDL_Renderer* renderer, SDL_Texture* gameover, SDL_Text
             SDL_RenderCopy(renderer, background, nullptr, nullptr);
 
             for (const auto& p : pipes) {
-                p.render(renderer);
+                p.render(renderer);//vẽ lại tất cả ông nước
             }
 
             flappy.render(renderer);
@@ -161,7 +161,7 @@ bool game::checkGameOver(SDL_Renderer* renderer, SDL_Texture* gameover, SDL_Text
             Uint32 startTime = SDL_GetTicks();
             SDL_Event event;
 
-            while (SDL_GetTicks() - startTime < 5000) { // 5 giây timeout
+            while (SDL_GetTicks() - startTime < 5000) { // chờ người chơi 5 giây nhấn phím
                 while (SDL_PollEvent(&event)) {
                     if (event.type == SDL_QUIT) {
                         running = false;
@@ -172,7 +172,7 @@ bool game::checkGameOver(SDL_Renderer* renderer, SDL_Texture* gameover, SDL_Text
                             running = false;
                             return true;
                         } else if (event.key.keysym.sym == SDLK_SPACE) {
-                            return true; // Nhấn SPACE để restart
+                            return true; //nhấn Space để tiếp tục
                         }
                     }
                 }
