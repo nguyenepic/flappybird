@@ -1,4 +1,10 @@
 -Trần Đạt Khôi Nguyên-24020255
+-Game flappy bird chơi để tích lũy điểm số bằng cách đếm số lần nhảy qua cột 
+-Em cho rằng bài mình xứng đáng được 6.5 -7 điểm vì
++Game được làm bằng những thuật toán đơn giản 
++Game được thiết lập thêm âm thanh(nhạc nền và hiệu ứng âm thanh khi nhảy và va chạm)
++Thêm hoạt hình đơn giản vỗ cánh cho chim khi bấm nút nhảy
++Thêm chữ điểm số trên màn hình
 # flappybird
 -https://lazyfoo.net/tutorials/SDL/index.php
 -https://gotz.medium.com/building-flappy-bird-from-scratch-using-c-and-sdl-a-comprehensive-guide-2dab708fbc30
