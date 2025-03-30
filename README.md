@@ -20,6 +20,9 @@
 -https://daynhauhoc.com/t/flappy-bird-lam-bang-c-su-dung-sdl/8413
 -https://www.youtube.com/playlist?list=PLICuKRn8LCNT2rPm9QVm7qNcQQ-FEAV8N
 -https://www.youtube.com/watch?v=helpbAYfBkQ
+-https://youtube.com/playlist?list=PL-IbDGFpCvtluDVQSSslFYzFueSbjDvZO&feature=shared
+-https://youtube.com/playlist?list=PLhfAbcv9cehhkG7ZQK0nfIGJC_C-wSLrx&feature=shared
+-https://youtu.be/LihM4SI81ug?feature=shared
 -link âm thanh
 +https://pixabay.com/sound-effects/search/flappybird/
 +https://www.101soundboards.com/boards/10178-flappy-bird-sounds
