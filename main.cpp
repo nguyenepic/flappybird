@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
     if (!running) break;
     flappyGame.flappy.update();
     flappyGame.flappy.keepInRange();
-     //nếu chưa có ống nào hoặc ống cuối cùng cách xa 200px thì thêm ống mới
+
     if (flappyGame.pipes.empty() || flappyGame.pipes.back().x < SCREEN_WIDTH - 200) {
         flappyGame.spawnpipe(pipeTexture);
     }
