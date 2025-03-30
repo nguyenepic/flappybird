@@ -24,7 +24,7 @@ struct game {
     void spawnpipe(SDL_Texture* pipeTexture);
     void renderScore(SDL_Renderer* renderer, int score);
     void update();
-    bool checkcollision(const bird& b, const pipe& p) const;
+    bool checkcollision(const bird& b, const pipe& p) ;
     bool checkGameOver(SDL_Renderer* renderer, SDL_Texture* gameover,SDL_Texture *background,int score, Mix_Chunk* hitSound, bool& running);
     void restartGame(SDL_Texture* birdTexture);
     void cleanup(SDL_Texture* background, SDL_Texture* birdTexture, SDL_Texture* pipeTexture,

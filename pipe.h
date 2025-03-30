@@ -12,9 +12,9 @@ struct pipe{
     SDL_Rect pipeRect;
     bool passed;
     void update(int speed);
-    void render(SDL_Renderer* renderer)const ;
+    void render(SDL_Renderer* renderer) ;
 
-    bool isOffScreen()const ;
+    bool isOffScreen() ;
     pipe(int x, int y, SDL_Texture* texture);
 };
 

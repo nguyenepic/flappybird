@@ -56,7 +56,7 @@ bool bird::keepInRange() {
 }
 
 void bird::updateAnimation() {
-    Uint32 currentTime = SDL_GetTicks();//lấy thời gian hiện tại
+    Uint32 currentTime = SDL_GetTicks();
     if (currentTime - lastTime >= ANIMATION_SPEED) {//kiểm tra đến lúc chuyển frame chưa
         frameIndex = (frameIndex + 1) % TOTAL_FRAMES;//vòng lặp các frame, chuyển về frame đầu tiên khi đến frame cuối
         lastTime = currentTime;

@@ -133,7 +133,7 @@ void game::renderScore(SDL_Renderer* renderer, int score) {
     TTF_CloseFont(font);
 }
 
-bool game::checkcollision(const bird& b, const pipe& p) const {
+bool game::checkcollision(const bird& b, const pipe& p)  {
     return SDL_HasIntersection(&b.birdRect, &p.pipeRect);
 }
 
@@ -144,7 +144,7 @@ bool game::checkGameOver(SDL_Renderer* renderer, SDL_Texture* gameover, SDL_Text
 
             SDL_RenderCopy(renderer, background, nullptr, nullptr);
 
-            for (const auto& p : pipes) {
+            for ( auto& p : pipes) {
                 p.render(renderer);//vẽ lại tất cả ông nước
             }
 

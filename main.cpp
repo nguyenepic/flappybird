@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
         p.update(5);//di chuyển tất cả ống nước sang trái với 5px mỗi frame
     }
     flappyGame.pipes.erase(remove_if(flappyGame.pipes.begin(), flappyGame.pipes.end(),//xóa các ống ra khỏi màn hình
-                                          [](const pipe& p) { return p.isOffScreen(); }),
+                                          []( pipe& p) { return p.isOffScreen(); }),
                            flappyGame.pipes.end());
 
     if (flappyGame.checkGameOver(graphic.renderer, gameover, background, score, audio.getHitSound(), running)) {
@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
 
     flappyGame.flappy.renderAnimation(graphic.renderer);
 
-    for (const auto& p : flappyGame.pipes) {
+    for ( auto& p : flappyGame.pipes) {
         p.render(graphic.renderer);
     }
     flappyGame.renderScore(graphic.renderer, score);
