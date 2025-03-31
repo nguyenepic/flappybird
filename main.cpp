@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
     bool running = true;
 
     while (running) {
-    flappyGame.handleEvent(running, audio.getFlapSound(), graphic.renderer,score);
+    flappyGame.handleEvent(running, audio.getFlapSound(), graphic.renderer);
 
     if (!running) break;
     flappyGame.flappy.update();

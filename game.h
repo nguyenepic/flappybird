@@ -20,7 +20,7 @@ struct game {
     bool running;
     bool isrunning() { return running; }
     void renderMenu(int selectedOption,SDL_Renderer* renderer);
-    void handleEvent(bool& running, Mix_Chunk* flapSound,SDL_Renderer* renderer,int &score);
+    void handleEvent(bool& running, Mix_Chunk* flapSound,SDL_Renderer* renderer);
     void spawnpipe(SDL_Texture* pipeTexture);
     void renderScore(SDL_Renderer* renderer, int score);
     bool checkcollision(const bird& b, const pipe& p) ;

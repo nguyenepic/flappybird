@@ -1,5 +1,6 @@
 
 
+
 #include "game.h"
 #include <SDL_ttf.h>
 #include <cstdlib>
@@ -13,7 +14,7 @@ game::game(SDL_Texture* birdTexture)
     running = true;
 }
 
-void game::handleEvent(bool& running, Mix_Chunk* flapSound, SDL_Renderer* renderer,int &score) {
+void game::handleEvent(bool& running, Mix_Chunk* flapSound, SDL_Renderer* renderer) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
@@ -25,7 +26,7 @@ void game::handleEvent(bool& running, Mix_Chunk* flapSound, SDL_Renderer* render
             } else if (event.key.keysym.sym == SDLK_ESCAPE) {
                 bool restart = showMenu(running, renderer);
                 if (restart) {
-                        score=0;
+
                     restartGame(flappy.texture);
                 }
             }

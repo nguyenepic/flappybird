@@ -7,24 +7,24 @@
 	<SDL.h>
 	<SDL_image.h>
 
-1743343066 source:d:\uet\ltnc\true game\flappy bird\pipe.cpp
+1743350897 source:d:\uet\ltnc\true game\flappy bird\pipe.cpp
 	"pipe.h"
 	<cstdlib>
 	<vector>
 
-1743343066 d:\uet\ltnc\true game\flappy bird\pipe.h
+1743350897 d:\uet\ltnc\true game\flappy bird\pipe.h
 	<SDL.h>
 	<SDL_image.h>
 	<vector>
 
-1743343099 source:d:\uet\ltnc\true game\flappy bird\game.cpp
+1743350735 source:d:\uet\ltnc\true game\flappy bird\game.cpp
 	"game.h"
 	<SDL_ttf.h>
 	<cstdlib>
 	<algorithm>
 	<string>
 
-1743349914 d:\uet\ltnc\true game\flappy bird\game.h
+1743429945 d:\uet\ltnc\true game\flappy bird\game.h
 	"graphic.h"
 	"audio.h"
 	"bird.h"
