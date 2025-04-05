@@ -30,6 +30,7 @@ int main(int argc, char* argv[]) {
 
     game flappyGame(birdTexture);
     flappyGame.restartGame(birdTexture);
+    flappyGame.showStartScreen(graphic.renderer, background);
     int score = 0;
     bool running = true;
 
@@ -51,7 +52,7 @@ int main(int argc, char* argv[]) {
                                           []( pipe& p) { return p.isOffScreen(); }),
                            flappyGame.pipes.end());
 
-    if (flappyGame.checkGameOver(graphic.renderer, gameover, background, score, audio.getHitSound(), running)) {
+    if (flappyGame.checkGameOver(graphic.renderer, gameover, background,score, audio.getHitSound(), running)) {
     bool restart = flappyGame.showMenu(running, graphic.renderer);
 
     if (restart) {

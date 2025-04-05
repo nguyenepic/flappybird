@@ -19,12 +19,13 @@ struct game {
     bool showMenu(bool& running,SDL_Renderer* renderer);
     bool running;
     bool isrunning() { return running; }
+    void showStartScreen(SDL_Renderer* renderer, SDL_Texture* background);
     void renderMenu(int selectedOption,SDL_Renderer* renderer);
     void handleEvent(bool& running, Mix_Chunk* flapSound,SDL_Renderer* renderer);
     void spawnpipe(SDL_Texture* pipeTexture);
     void renderScore(SDL_Renderer* renderer, int score);
     bool checkcollision(const bird& b, const pipe& p) ;
-    bool checkGameOver(SDL_Renderer* renderer, SDL_Texture* gameover,SDL_Texture *background,int score, Mix_Chunk* hitSound, bool& running);
+    bool checkGameOver(SDL_Renderer* renderer, SDL_Texture* gameover,SDL_Texture *background,int &score, Mix_Chunk* hitSound, bool& running);
     void restartGame(SDL_Texture* birdTexture);
     void cleanup(SDL_Texture* background, SDL_Texture* birdTexture, SDL_Texture* pipeTexture,
                  SDL_Texture* gameover, Mix_Chunk* flapSound, Mix_Chunk* hitSound,

@@ -26,7 +26,6 @@ void game::handleEvent(bool& running, Mix_Chunk* flapSound, SDL_Renderer* render
             } else if (event.key.keysym.sym == SDLK_ESCAPE) {
                 bool restart = showMenu(running, renderer);
                 if (restart) {
-
                     restartGame(flappy.texture);
                 }
             }
@@ -68,6 +67,40 @@ bool game::showMenu(bool& running, SDL_Renderer* renderer) {
     }
     return false; // Không restart
 }
+void game::showStartScreen(SDL_Renderer* renderer, SDL_Texture* background) {
+    bool waiting = true;
+    TTF_Font* font = TTF_OpenFont("arial.ttf", 24);
+    if (!font) return;
+    SDL_Color textColor = {255, 255, 255};
+    SDL_Surface* surface = TTF_RenderText_Solid(font, "Press SPACE to start", textColor);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+
+    SDL_Rect textRect = {
+        (SCREEN_WIDTH - 300) / 2,
+        (SCREEN_HEIGHT - 50) / 2,
+        300,
+        50
+    };
+    while (waiting) {
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                running = false;
+                waiting = false;
+            } else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE) {
+                waiting = false;
+            }
+        }
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, background, nullptr, nullptr);
+        SDL_RenderCopy(renderer, texture, nullptr, &textRect);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(16);
+    }
+    SDL_DestroyTexture(texture);
+    TTF_CloseFont(font);
+}
 
 void game::renderMenu(int selectedOption,SDL_Renderer* renderer) {
     SDL_Color textColor = {255, 255, 255};
@@ -93,9 +126,9 @@ void game::renderMenu(int selectedOption,SDL_Renderer* renderer) {
 }
 
 void game::spawnpipe(SDL_Texture* pipeTexture) {
-    double pipeX = SCREEN_WIDTH;
+    double pipeX = SCREEN_WIDTH;//vị trí xuất hiện là góc phải
     double gap = 210;//khoảng cách 2 ống
-    double topHeight = rand() % 150 + 100;//chiều cao ngẫu nhiên
+    double topHeight = rand() % 150 + 100;//chiều cao min 100,max 249
 
     pipes.push_back(pipe(pipeX, topHeight - 300, pipeTexture));//topheight-300:đảm bảo ống nước trên được đặt đúng vị trí vì chiều cao chuẩn là 300
     pipes.push_back(pipe(pipeX, topHeight + gap, pipeTexture));
@@ -111,7 +144,7 @@ void game::renderScore(SDL_Renderer* renderer, int score) {
     SDL_Color textColor = {255, 255, 255}; // Trắng
     string scoreText = "Score: " + to_string(score);
 
-    SDL_Surface* textSurface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);//menuText[i].c_str :chuyển nội dung thành char
+    SDL_Surface* textSurface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);//c_str :chuyển string thành char
     if (!textSurface) {
         SDL_Log("ERROR: Failed to create text surface: %s", TTF_GetError());
         TTF_CloseFont(font);
@@ -138,7 +171,7 @@ bool game::checkcollision(const bird& b, const pipe& p)  {
     return SDL_HasIntersection(&b.birdRect, &p.pipeRect);
 }
 
-bool game::checkGameOver(SDL_Renderer* renderer, SDL_Texture* gameover, SDL_Texture* background, int score, Mix_Chunk* hitSound, bool& running) {
+bool game::checkGameOver(SDL_Renderer* renderer, SDL_Texture* gameover, SDL_Texture* background,int &score, Mix_Chunk* hitSound, bool& running) {
     for (const auto& p : pipes) {
         if (checkcollision(flappy, p) || flappy.birdRect.y > SCREEN_HEIGHT) {
             audio.playSound(hitSound);
