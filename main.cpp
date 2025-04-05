@@ -56,7 +56,6 @@ int main(int argc, char* argv[]) {
     bool restart = flappyGame.showMenu(running, graphic.renderer);
 
     if (restart) {
-        score = 0;
         flappyGame.restartGame(birdTexture,score);
     } else if (!running) {
         break;
