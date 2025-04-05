@@ -31,7 +31,7 @@ struct bird {
     void falling();
     void jump();
     bool keepInRange();
-    void render(SDL_Renderer* renderer);
+
 
     void updateAnimation();
     void renderAnimation(SDL_Renderer* renderer);

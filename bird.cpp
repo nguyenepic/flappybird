@@ -68,8 +68,4 @@ void bird::renderAnimation(SDL_Renderer* renderer) {
     SDL_RenderCopy(renderer, texture, &srcRect, &birdRect);
 }
 
-void bird::render(SDL_Renderer* renderer) {
-    if (texture) {
-        renderAnimation(renderer); // Gọi hàm vẽ animation thay vì vẽ cố định
-    }
-}
+

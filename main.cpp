@@ -27,15 +27,15 @@ int main(int argc, char* argv[]) {
     Mix_Volume(-1, MIX_MAX_VOLUME);
     Mix_VolumeMusic(MIX_MAX_VOLUME);
     Mix_PlayMusic(audio.getBackgroundMusic(), -1);
-
+     int score = 0;
     game flappyGame(birdTexture);
-    flappyGame.restartGame(birdTexture);
+    flappyGame.restartGame(birdTexture,score);
     flappyGame.showStartScreen(graphic.renderer, background);
-    int score = 0;
+
     bool running = true;
 
     while (running) {
-    flappyGame.handleEvent(running, audio.getFlapSound(), graphic.renderer);
+    flappyGame.handleEvent(running, audio.getFlapSound(), graphic.renderer,score);
 
     if (!running) break;
     flappyGame.flappy.update();
@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
 
     if (restart) {
         score = 0;
-        flappyGame.restartGame(birdTexture);
+        flappyGame.restartGame(birdTexture,score);
     } else if (!running) {
         break;
     }

@@ -14,7 +14,7 @@ game::game(SDL_Texture* birdTexture)
     running = true;
 }
 
-void game::handleEvent(bool& running, Mix_Chunk* flapSound, SDL_Renderer* renderer) {
+void game::handleEvent(bool& running, Mix_Chunk* flapSound, SDL_Renderer* renderer,int &score) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
@@ -26,7 +26,7 @@ void game::handleEvent(bool& running, Mix_Chunk* flapSound, SDL_Renderer* render
             } else if (event.key.keysym.sym == SDLK_ESCAPE) {
                 bool restart = showMenu(running, renderer);
                 if (restart) {
-                    restartGame(flappy.texture);
+                    restartGame(flappy.texture,score);
                 }
             }
         }
@@ -182,7 +182,7 @@ bool game::checkGameOver(SDL_Renderer* renderer, SDL_Texture* gameover, SDL_Text
                 p.render(renderer);//vẽ lại tất cả ông nước
             }
 
-            flappy.render(renderer);
+            flappy.renderAnimation(renderer);
             renderScore(renderer, score); // Hiển thị điểm số
 
             SDL_Rect goRect = { (SCREEN_WIDTH - 400) / 2, (SCREEN_HEIGHT - 200) / 2, 400, 200 };
@@ -218,10 +218,12 @@ bool game::checkGameOver(SDL_Renderer* renderer, SDL_Texture* gameover, SDL_Text
     return false;
 }
 
-void game::restartGame(SDL_Texture* birdTexture) {
+void game::restartGame(SDL_Texture* birdTexture,int &score) {
     flappy = bird(50, 250, birdTexture);
     pipes.clear();
+    score=0;
     running = true;
+
 }
 
 void game::cleanup(SDL_Texture* background, SDL_Texture* birdTexture, SDL_Texture* pipeTexture,
